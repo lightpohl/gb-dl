@@ -2,7 +2,8 @@
 
 let program = require("commander");
 let { version } = require("../package.json");
-let { getVideosResponse, downloadVideo, showInfo } = require("./util");
+let { getVideosResponse, downloadVideo } = require("./util");
+let { shows } = require("./shows");
 
 program
   .version(version)
@@ -45,14 +46,14 @@ if (!apiKey) {
 } else if (!regex && !videoNumber) {
   console.error("--regex or --video-number must be provided");
   process.exit(1);
-} else if (!showInfo[show]) {
+} else if (!shows[show]) {
   console.error(
     `--show ${show} either does not exist or is not currently supported`
   );
   process.exit(1);
 }
 
-let filters = [`video_show:${showInfo[show].id}`];
+let filters = [`video_show:${shows[show].id}`];
 if (onlyPremium) {
   filters.push("premium:true");
 } else if (onlyFree) {
