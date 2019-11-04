@@ -4,6 +4,7 @@
   "description": "A CLI for downloading Giant Bomb videos.",
   "bin": "./bin/bin.js",
   "scripts": {
+    "lint": "eslint --ext .js .",
     "precommit": "lint-staged",
     "prepush": "npm run lint",
     "release": "standard-version"
