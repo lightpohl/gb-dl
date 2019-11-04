@@ -1,6 +1,7 @@
 let got = require("got");
 let fs = require("fs");
 let path = require("path");
+let filenamify = require("filenamify");
 
 let showInfo = {
   bestof: {
@@ -99,7 +100,7 @@ let downloadVideo = async ({ apiKey, video, quality, outDir }) => {
 
   let downloadUrl = `${qualityUrl}?api_key=${apiKey}`;
 
-  let safeFilename = video.name.replace(/[^a-z0-9\- ]/gi, "_");
+  let safeFilename = filenamify(video.name, { replacement: "_" });
   let fileExt = path.extname(qualityUrl);
   let outputPath = path.resolve(
     process.cwd(),
