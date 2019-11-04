@@ -1,16 +1,8 @@
 #!/usr/bin/env node
 
 let program = require("commander");
-let version = require("../package.json").version;
-let { getVideosResponse, downloadVideo } = require("./util");
-
-let showInfo = {
-  bombcast: {
-    api_detail_url: "https://www.giantbomb.com/api/video_show/2340-5/",
-    id: 5,
-    title: "Giant Bombcast"
-  }
-};
+let { version } = require("../package.json");
+let { getVideosResponse, downloadVideo, showInfo } = require("./util");
 
 program
   .version(version)
