@@ -4,19 +4,19 @@
 
 ## How to Use
 
-`npx gb-dl --api-key <YOUR_API_KEY> --show <show> --regex <regex>`
+`npx gb-dl --api-key <YOUR_API_KEY> --show-regex <regex> --video-regex <regex>`
 
-`npx gb-dl --api-key <YOUR_API_KEY> --show bombcast --regex "Giant Bombcast 607"`
+`npx gb-dl --api-key <YOUR_API_KEY> --show-regex "Giant Bombcast" --video-regex "Giant Bombcast 607"`
 
-`npx gb-dl --api-key <YOUR_API_KEY> --show bombcast --video-number 0`
+`npx gb-dl --api-key <YOUR_API_KEY> --show-regex "Giant Bombcast" --video-number 0`
 
 ## Options
 
 | Option       | Type                                      | Required | Description                                                                           |
 | ------------ | ----------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
 | api-key      | [API Key](https://www.giantbomb.com/api/) | true     | Individual API key for Giant Bomb.                                                    |
-| show         | [Supported Shows](#supported-shows)       | true     | Identifier for supported show. View list of supported shows below.                    |
-| regex        | String                                    | false    | Used to find matching video title of show. Passed into a `new RegExp()`.              |
+| show-regex   | String                                    | true     | Used to find matching show title. Passed into a `new RegExp()`.                       |
+| video-regex  | String                                    | false    | Used to find matching video title of show. Passed into a `new RegExp()`.              |
 | video-number | Number                                    | false    | Zero-based video index for provided show (most recent video is `0`). Defaults to `0`. |
 | only-premium |                                           | false    | Filter search to only premium videos.                                                 |
 | only-free    |                                           | false    | Filter search to only free videos.                                                    |
@@ -34,16 +34,3 @@
 - The cached responses will be used for one hour.
 - Adding `--clean` to the command will bypass the cache.
 - Manually deleting the cache is also an option if needed.
-
-## Supported Shows
-
-**More being added soon!**
-
-- bestof
-- bombcast
-- burglemybananas
-- endurancerun
-- quicklooks
-- reviews
-- unfinished
-- vinnyvania

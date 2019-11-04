@@ -3,7 +3,40 @@ let fs = require("fs");
 let path = require("path");
 let filenamify = require("filenamify");
 
-let fieldList = [
+let showsFieldList = ["id", "title"];
+let showsFieldListParam = `&field_list${showsFieldList.join(",")}`;
+let baseShowsUrl = `https://www.giantbomb.com/api/video_shows?format=json${showsFieldListParam}`;
+
+let getShowsResponse = async ({ apiKey, limit, offset, clean }) => {
+  let apiKeyParam = `&api_key=${apiKey}`;
+  let limitParam = `&limit=${limit}`;
+  let offsetParam = `&offset=${offset}`;
+
+  let requestUrl = `${baseShowsUrl}${apiKeyParam}${limitParam}${offsetParam}`;
+
+  let cacheData = clean ? null : readCache(requestUrl);
+  if (cacheData) {
+    console.log(`cache result found for ${requestUrl}`);
+    return cacheData;
+  }
+
+  console.log(`fetching ${requestUrl}`);
+  let { body } = await got(requestUrl, { json: true });
+
+  if (!body) {
+    console.error("no response body");
+    process.exit(1);
+  }
+
+  if (body.status_code !== 1) {
+    console.error(body.error);
+    process.exit(1);
+  }
+
+  return writeCache({ key: requestUrl, data: body });
+};
+
+let videosFieldList = [
   "name",
   "deck",
   "publish_date",
@@ -15,8 +48,8 @@ let fieldList = [
   "low_url"
 ];
 
-let fieldListParam = `&field_list=${fieldList.join(",")}`;
-let baseVideosUrl = `https://www.giantbomb.com/api/videos/?format=json${fieldListParam}`;
+let videosFieldListParam = `&field_list=${videosFieldList.join(",")}`;
+let baseVideosUrl = `https://www.giantbomb.com/api/videos/?format=json${videosFieldListParam}`;
 
 let getVideosResponse = async ({ apiKey, offset, limit, filters, clean }) => {
   let apiKeyParam = `&api_key=${apiKey}`;
@@ -112,4 +145,4 @@ let readCache = key => {
   return data;
 };
 
-module.exports = { getVideosResponse, downloadVideo };
+module.exports = { getShowsResponse, getVideosResponse, downloadVideo };

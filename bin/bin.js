@@ -2,8 +2,10 @@
 
 let program = require("commander");
 let { version } = require("../package.json");
-let { getVideosResponse, downloadVideo } = require("./util");
-let { shows } = require("./shows");
+let { getShowsResponse, getVideosResponse, downloadVideo } = require("./util");
+
+let DEFAULT_LIMIT = 100;
+let FILTERS = [];
 
 program
   .version(version)
@@ -11,13 +13,19 @@ program
     "--api-key <key>",
     "required: individual API key for the Giant Bomb API"
   )
-  .option("--show <name>", "required: supported show name")
+  .option(
+    "--show-regex <string>",
+    "required: search shows for first show title that matches regex"
+  )
   .option(
     "--video-number <number>",
     "video number to download (most recent = 0)",
     0
   )
-  .option("--regex <string>", "search show for first name match to regex")
+  .option(
+    "--video-regex <string>",
+    "search show for first video name that matches regex"
+  )
   .option("--only-premium", "show only premium versions")
   .option("--only-free", "show only free versions")
   .option("--quality <hd/high/low>", "video quality to download", "hd")
@@ -26,56 +34,66 @@ program
   .option("--clean", "ignore previous cache results for query")
   .parse(process.argv);
 
-let {
-  apiKey,
-  show,
-  videoNumber,
-  regex,
-  onlyPremium,
-  onlyFree,
-  quality,
-  outDir,
-  info,
-  clean
-} = program;
-
-if (!apiKey) {
+if (!program.apiKey) {
   console.error("--api-key not provided");
   process.exit(1);
-} else if (!show) {
-  console.error("--show not provided");
+} else if (!program.showRegex) {
+  console.error("--show-regex not provided");
   process.exit(1);
-} else if (!regex && !videoNumber) {
-  console.error("--regex or --video-number must be provided");
-  process.exit(1);
-} else if (!shows[show]) {
-  console.error(
-    `--show ${show} either does not exist or is not currently supported`
-  );
+} else if (!program.videoRegex && !program.videoNumber) {
+  console.error("--video-regex or --video-number must be provided");
   process.exit(1);
 }
 
-let filters = [`video_show:${shows[show].id}`];
-if (onlyPremium) {
-  filters.push("premium:true");
-} else if (onlyFree) {
-  filters.push("premium:false");
+if (program.onlyPremium) {
+  FILTERS.push("premium:true");
+} else if (program.onlyFree) {
+  FILTERS.push("premium:false");
 }
 
-let main = async () => {
-  let result;
-  if (regex) {
-    let nameRegex = new RegExp(regex);
+let getShow = async ({ apiKey, regexString, clean }) => {
+  let result = null;
+  let regex = new RegExp(regexString);
+  let offset = 0;
+  let limit = DEFAULT_LIMIT;
+  let totalShows = Infinity;
+
+  while (!result && offset < totalShows) {
+    let response = await getShowsResponse({
+      apiKey,
+      limit,
+      offset,
+      clean
+    });
+
+    totalShows = response.number_of_total_results;
+
+    let { results } = response;
+    result = results.find(show => {
+      return regex.test(show.title);
+    });
+
+    offset += limit;
+  }
+
+  return result;
+};
+
+let getVideo = async ({ apiKey, regexString, videoNumber, filters, clean }) => {
+  let result = null;
+
+  if (regexString) {
+    let nameRegex = new RegExp(regexString);
     let totalVideos = Infinity;
-    let limit = 100;
     let offset = 0;
 
     while (!result && offset < totalVideos) {
       let response = await getVideosResponse({
         apiKey,
-        limit,
         offset,
-        filters
+        filters,
+        clean,
+        limit: DEFAULT_LIMIT
       });
 
       totalVideos = response.number_of_total_results;
@@ -85,16 +103,13 @@ let main = async () => {
         return nameRegex.test(video.name);
       });
 
-      offset += limit;
+      offset += DEFAULT_LIMIT;
     }
   } else {
-    let limit = 1;
-    let offset = videoNumber;
-
     let response = await getVideosResponse({
       apiKey,
-      limit,
-      offset,
+      limit: 1,
+      offset: videoNumber,
       filters,
       clean
     });
@@ -103,26 +118,46 @@ let main = async () => {
     result = results[0];
   }
 
-  if (!result) {
-    console.error("no result for query");
+  return result;
+};
+
+let main = async () => {
+  let show = await getShow({
+    apiKey: program.apiKey,
+    regexString: program.showRegex,
+    clean: program.clean
+  });
+
+  if (!show) {
+    console.error("no show found for query");
     process.exit(1);
   }
 
-  if (info) {
-    console.log("name:", result.name);
-    console.log("deck:", result.deck);
-    console.log("publish_date:", result.publish_date);
-    console.log("id:", result.id);
-    console.log("api_detail_url:", result.api_detail_url);
-    console.log("site_detail_url:", result.site_detail_url);
+  FILTERS.push(`video_show:${show.id}`);
+
+  const video = await getVideo({
+    apiKey: program.apiKey,
+    regexString: program.videoRegex,
+    videoNumber: program.videoNumber,
+    clean: program.clean,
+    filters: FILTERS
+  });
+
+  if (!video) {
+    console.error("no video found for query");
+    process.exit(1);
+  }
+
+  if (program.info) {
+    console.log(video);
     process.exit(0);
   }
 
   await downloadVideo({
-    apiKey,
-    outDir,
-    quality,
-    video: result
+    video,
+    apiKey: program.apikey,
+    outDir: program.outDir,
+    quality: program.quality
   });
 };
 
