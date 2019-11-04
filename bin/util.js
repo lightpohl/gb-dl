@@ -18,14 +18,14 @@ let fieldList = [
 let fieldListParam = `&field_list=${fieldList.join(",")}`;
 let baseVideosUrl = `https://www.giantbomb.com/api/videos/?format=json${fieldListParam}`;
 
-let getVideosResponse = async ({ apiKey, offset, limit, filters }) => {
+let getVideosResponse = async ({ apiKey, offset, limit, filters, clean }) => {
   let apiKeyParam = `&api_key=${apiKey}`;
   let limitParam = `&limit=${limit}`;
   let offsetParam = `&offset=${offset}`;
   let filterParam = `&filter=${filters.join(",")}`;
   let requestUrl = `${baseVideosUrl}${apiKeyParam}${limitParam}${offsetParam}${filterParam}`;
 
-  let cacheData = readCache(requestUrl);
+  let cacheData = clean ? null : readCache(requestUrl);
   if (cacheData) {
     console.log(`cache result found for ${requestUrl}`);
     return cacheData;
@@ -72,7 +72,7 @@ let downloadVideo = async ({ apiKey, video, quality, outDir }) => {
   got.stream(downloadUrl).pipe(fs.createWriteStream(outputPath));
 };
 
-let cachePath = path.resolve(__dirname, "cache.json");
+let cachePath = path.resolve(process.cwd(), "gb-dl-cache.json");
 let writeCache = ({ key, data }) => {
   let cache = {};
 

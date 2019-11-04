@@ -23,6 +23,7 @@ program
   .option("--quality <hd/high/low>", "video quality to download", "hd")
   .option("--out-dir <path>", "specify output directory", "./")
   .option("--info", "show selected video info instead of downloading")
+  .option("--clean", "ignore previous cache results for query")
   .parse(process.argv);
 
 let {
@@ -34,7 +35,8 @@ let {
   onlyFree,
   quality,
   outDir,
-  info
+  info,
+  clean
 } = program;
 
 if (!apiKey) {
@@ -93,7 +95,8 @@ let main = async () => {
       apiKey,
       limit,
       offset,
-      filters
+      filters,
+      clean
     });
 
     let { results } = response;
