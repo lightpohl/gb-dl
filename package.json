@@ -5,8 +5,6 @@
   "bin": "./bin/bin.js",
   "scripts": {
     "lint": "eslint --ext .js .",
-    "precommit": "lint-staged",
-    "prepush": "npm run lint",
     "release": "standard-version"
   },
   "lint-staged": {
@@ -40,5 +38,11 @@
   "dependencies": {
     "commander": "^4.0.0",
     "got": "^9.6.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run lint"
+    }
   }
 }
