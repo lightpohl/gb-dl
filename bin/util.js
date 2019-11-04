@@ -26,6 +26,7 @@ let getVideosResponse = async ({ apiKey, offset, limit, filters }) => {
 
   let cacheData = readCache(requestUrl);
   if (cacheData) {
+    console.log(`cache result found for ${requestUrl}`);
     return cacheData;
   }
 
