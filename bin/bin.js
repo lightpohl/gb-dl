@@ -50,9 +50,10 @@ if (!apiKey) {
 } else if (!show) {
   console.error("--show not provided");
   process.exit(1);
-}
-
-if (!showInfo[show]) {
+} else if (!regex && !videoNumber) {
+  console.error("--regex or --video-number must be provided");
+  process.exit(1);
+} else if (!showInfo[show]) {
   console.error(
     `--show ${show} either does not exist or is not currently supported`
   );
@@ -70,7 +71,7 @@ let main = async () => {
   let result;
   if (regex) {
     let nameRegex = new RegExp(regex);
-    let totalVideos = 1000;
+    let totalVideos = Infinity;
     let limit = 100;
     let offset = 0;
 
