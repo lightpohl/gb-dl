@@ -1,6 +1,6 @@
 # gb-dl
 
-## A CLI for downloading Giant Bomb videos.
+## A CLI for downloading [Giant Bomb](https://www.giantbomb.com) videos.
 
 ## How to Use
 
