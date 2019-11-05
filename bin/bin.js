@@ -2,10 +2,9 @@
 
 let program = require("commander");
 let { version } = require("../package.json");
-let { getShowsResponse, getVideosResponse, downloadVideo } = require("./util");
+let { getShow, getVideo, downloadVideo } = require("./util");
 
-let DEFAULT_LIMIT = 100;
-let FILTERS = [];
+let filters = [];
 
 program
   .version(version)
@@ -46,80 +45,10 @@ if (!program.apiKey) {
 }
 
 if (program.onlyPremium) {
-  FILTERS.push("premium:true");
+  filters.push("premium:true");
 } else if (program.onlyFree) {
-  FILTERS.push("premium:false");
+  filters.push("premium:false");
 }
-
-let getShow = async ({ apiKey, regexString, clean }) => {
-  let result = null;
-  let regex = new RegExp(regexString);
-  let offset = 0;
-  let limit = DEFAULT_LIMIT;
-  let totalShows = Infinity;
-
-  while (!result && offset < totalShows) {
-    let response = await getShowsResponse({
-      apiKey,
-      limit,
-      offset,
-      clean
-    });
-
-    totalShows = response.number_of_total_results;
-
-    let { results } = response;
-    result = results.find(show => {
-      return regex.test(show.title);
-    });
-
-    offset += limit;
-  }
-
-  return result;
-};
-
-let getVideo = async ({ apiKey, regexString, videoNumber, filters, clean }) => {
-  let result = null;
-
-  if (regexString) {
-    let nameRegex = new RegExp(regexString);
-    let totalVideos = Infinity;
-    let offset = 0;
-
-    while (!result && offset < totalVideos) {
-      let response = await getVideosResponse({
-        apiKey,
-        offset,
-        filters,
-        clean,
-        limit: DEFAULT_LIMIT
-      });
-
-      totalVideos = response.number_of_total_results;
-
-      let { results } = response;
-      result = results.find(video => {
-        return nameRegex.test(video.name);
-      });
-
-      offset += DEFAULT_LIMIT;
-    }
-  } else {
-    let response = await getVideosResponse({
-      apiKey,
-      limit: 1,
-      offset: videoNumber,
-      filters,
-      clean
-    });
-
-    let { results } = response;
-    result = results[0];
-  }
-
-  return result;
-};
 
 let main = async () => {
   let show = await getShow({
@@ -133,14 +62,14 @@ let main = async () => {
     process.exit(1);
   }
 
-  FILTERS.push(`video_show:${show.id}`);
+  filters.push(`video_show:${show.id}`);
 
   const video = await getVideo({
+    filters,
     apiKey: program.apiKey,
     regexString: program.videoRegex,
     videoNumber: program.videoNumber,
-    clean: program.clean,
-    filters: FILTERS
+    clean: program.clean
   });
 
   if (!video) {

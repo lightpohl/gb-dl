@@ -3,6 +3,78 @@ let fs = require("fs");
 let path = require("path");
 let filenamify = require("filenamify");
 
+let DEFAULT_LIMIT = 100;
+
+let getShow = async ({ apiKey, regexString, clean }) => {
+  let result = null;
+  let regex = new RegExp(regexString);
+  let offset = 0;
+  let limit = DEFAULT_LIMIT;
+  let totalShows = Infinity;
+
+  while (!result && offset < totalShows) {
+    let response = await getShowsResponse({
+      apiKey,
+      limit,
+      offset,
+      clean
+    });
+
+    totalShows = response.number_of_total_results;
+
+    let { results } = response;
+    result = results.find(show => {
+      return regex.test(show.title);
+    });
+
+    offset += limit;
+  }
+
+  return result;
+};
+
+let getVideo = async ({ apiKey, regexString, videoNumber, filters, clean }) => {
+  let result = null;
+
+  if (regexString) {
+    let nameRegex = new RegExp(regexString);
+    let totalVideos = Infinity;
+    let offset = 0;
+
+    while (!result && offset < totalVideos) {
+      let response = await getVideosResponse({
+        apiKey,
+        offset,
+        filters,
+        clean,
+        limit: DEFAULT_LIMIT
+      });
+
+      totalVideos = response.number_of_total_results;
+
+      let { results } = response;
+      result = results.find(video => {
+        return nameRegex.test(video.name);
+      });
+
+      offset += DEFAULT_LIMIT;
+    }
+  } else {
+    let response = await getVideosResponse({
+      apiKey,
+      limit: 1,
+      offset: videoNumber,
+      filters,
+      clean
+    });
+
+    let { results } = response;
+    result = results[0];
+  }
+
+  return result;
+};
+
 let showsFieldList = ["id", "title"];
 let showsFieldListParam = `&field_list${showsFieldList.join(",")}`;
 let baseShowsUrl = `https://www.giantbomb.com/api/video_shows?format=json${showsFieldListParam}`;
@@ -145,4 +217,10 @@ let readCache = key => {
   return data;
 };
 
-module.exports = { getShowsResponse, getVideosResponse, downloadVideo };
+module.exports = {
+  getShow,
+  getVideo,
+  getShowsResponse,
+  getVideosResponse,
+  downloadVideo
+};
