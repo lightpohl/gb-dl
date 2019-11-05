@@ -155,7 +155,7 @@ let main = async () => {
 
   await downloadVideo({
     video,
-    apiKey: program.apikey,
+    apiKey: program.apiKey,
     outDir: program.outDir,
     quality: program.quality
   });
