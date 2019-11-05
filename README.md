@@ -16,7 +16,7 @@
 | ------------ | ----------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
 | api-key      | [API Key](https://www.giantbomb.com/api/) | true     | Individual API key for Giant Bomb.                                                    |
 | show-regex   | String                                    | true     | Used to find matching show title. Passed into a `new RegExp()`.                       |
-| video-regex  | String                                    | false    | Used to find matching video title of show. Passed into a `new RegExp()`.              |
+| video-regex  | String                                    | false    | Used to find matching video title. Passed into a `new RegExp()`.                      |
 | video-number | Number                                    | false    | Zero-based video index for provided show (most recent video is `0`). Defaults to `0`. |
 | only-premium |                                           | false    | Filter search to only premium videos.                                                 |
 | only-free    |                                           | false    | Filter search to only free videos.                                                    |
