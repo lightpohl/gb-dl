@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/lightpohl/gb-dl/compare/v1.0.0...v1.0.1) (2019-11-05)
+
+
+### Bug Fixes
+
+* API key not being included in download request ([0697338](https://github.com/lightpohl/gb-dl/commit/06973386861039a70562cd04cd954c4841a0429c))
+
 ## [1.0.0](https://github.com/lightpohl/gb-dl/compare/v0.1.3...v1.0.0) (2019-11-05)
 
 ### [0.1.3](https://github.com/lightpohl/gb-dl/compare/v0.1.2...v0.1.3) (2019-11-04)
