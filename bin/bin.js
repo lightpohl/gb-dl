@@ -2,7 +2,7 @@
 
 let program = require("commander");
 let { version } = require("../package.json");
-let { getShow, getVideo, downloadVideo } = require("./util");
+let { getVideoSearch, getShow, getVideo, downloadVideo } = require("./util");
 
 let filters = [];
 
@@ -55,6 +55,28 @@ if (program.onlyPremium) {
 }
 
 let main = async () => {
+  let searchResult = null;
+
+  if (program.showRegex && program.videoRegex) {
+    searchResult = await getVideoSearch({
+      apiKey: program.apiKey,
+      videoRegexString: program.videoRegex,
+      showRegexString: program.showRegex,
+      clean: program.clean
+    });
+  }
+
+  if (searchResult) {
+    await downloadVideo({
+      video: searchResult,
+      apiKey: program.apiKey,
+      outDir: program.outDir,
+      quality: program.quality
+    });
+
+    return;
+  }
+
   let show = await getShow({
     apiKey: program.apiKey,
     regexString: program.showRegex,
@@ -83,7 +105,7 @@ let main = async () => {
 
   if (program.info) {
     console.log(video);
-    process.exit(0);
+    return;
   }
 
   await downloadVideo({

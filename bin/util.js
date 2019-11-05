@@ -5,6 +5,70 @@ let filenamify = require("filenamify");
 
 let DEFAULT_LIMIT = 100;
 
+let videosFieldList = [
+  "name",
+  "deck",
+  "publish_date",
+  "id",
+  "api_detail_url",
+  "site_detail_url",
+  "hd_url",
+  "high_url",
+  "low_url"
+];
+
+let searchFieldList = [...videosFieldList, "video_show"];
+let searchFieldListParam = `&field_list=${searchFieldList.join(",")}`;
+let baseSearchUrl = `https://www.giantbomb.com/api/search?format=json&resources=video${searchFieldListParam}`;
+
+let getVideoSearch = async ({
+  apiKey,
+  videoRegexString,
+  showRegexString,
+  clean
+}) => {
+  let result = null;
+  let showRegex = new RegExp(showRegexString);
+  let videoRegex = new RegExp(videoRegexString);
+
+  let queryParam = `&query="${videoRegexString}"`;
+  let apiKeyParam = `&api_key=${apiKey}`;
+
+  let requestUrl = `${baseSearchUrl}${apiKeyParam}${queryParam}`;
+
+  let cacheData = clean ? null : readCache(requestUrl);
+  if (cacheData) {
+    console.log(`cache result found for ${requestUrl}`);
+    return cacheData;
+  }
+
+  console.log(`fetching ${requestUrl}`);
+  let { body } = await got(requestUrl, { json: true });
+
+  if (!body) {
+    console.error("no response body");
+    return null;
+  }
+
+  if (body.status_code !== 1) {
+    console.error(body.error);
+    return null;
+  }
+
+  writeCache({ key: requestUrl, data: body });
+
+  let { results } = body;
+  result = results.find(video => {
+    return (
+      videoRegex.test(video.name) &&
+      video.video_show &&
+      showRegex.test(video.video_show.title)
+    );
+  });
+
+  return result;
+};
+
 let getShow = async ({ apiKey, regexString, clean }) => {
   let result = null;
   let regex = new RegExp(regexString);
@@ -107,18 +171,6 @@ let getShowsResponse = async ({ apiKey, limit, offset, clean }) => {
 
   return writeCache({ key: requestUrl, data: body });
 };
-
-let videosFieldList = [
-  "name",
-  "deck",
-  "publish_date",
-  "id",
-  "api_detail_url",
-  "site_detail_url",
-  "hd_url",
-  "high_url",
-  "low_url"
-];
 
 let videosFieldListParam = `&field_list=${videosFieldList.join(",")}`;
 let baseVideosUrl = `https://www.giantbomb.com/api/videos/?format=json${videosFieldListParam}`;
@@ -237,6 +289,7 @@ let readCache = key => {
 };
 
 module.exports = {
+  getVideoSearch,
   getShow,
   getVideo,
   getShowsResponse,
