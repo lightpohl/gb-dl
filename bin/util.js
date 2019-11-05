@@ -4,6 +4,26 @@ let path = require("path");
 let filenamify = require("filenamify");
 
 let DEFAULT_LIMIT = 100;
+let RATE_LIMIT_MS = 1000;
+let LAST_FETCH_CALL = null;
+
+let rateLimit = () => {
+  return new Promise(resolve => {
+    if (!LAST_FETCH_CALL) {
+      LAST_FETCH_CALL = Date.now();
+      resolve();
+    }
+
+    let diffMs = Date.now() - LAST_FETCH_CALL;
+
+    if (diffMs < RATE_LIMIT_MS) {
+      setTimeout(() => {
+        LAST_FETCH_CALL = Date.now();
+        resolve();
+      }, RATE_LIMIT_MS - diffMs);
+    }
+  });
+};
 
 let videosFieldList = [
   "name",
@@ -27,6 +47,7 @@ let getVideoSearch = async ({
   showRegexString,
   clean
 }) => {
+  await rateLimit();
   let result = null;
   let showRegex = new RegExp(showRegexString);
   let videoRegex = new RegExp(videoRegexString);
@@ -70,6 +91,7 @@ let getVideoSearch = async ({
 };
 
 let getShow = async ({ apiKey, regexString, clean }) => {
+  await rateLimit();
   let result = null;
   let regex = new RegExp(regexString);
   let offset = 0;
@@ -98,6 +120,7 @@ let getShow = async ({ apiKey, regexString, clean }) => {
 };
 
 let getVideo = async ({ apiKey, regexString, videoNumber, filters, clean }) => {
+  await rateLimit();
   let result = null;
 
   if (regexString) {
