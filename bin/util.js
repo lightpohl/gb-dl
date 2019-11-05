@@ -153,7 +153,10 @@ let getVideosResponse = async ({ apiKey, offset, limit, filters, clean }) => {
 };
 
 let downloadVideo = async ({ apiKey, video, quality, outDir }) => {
-  let qualityUrl = video[`${quality}_url`];
+  let qualityUrl =
+    quality === "highest"
+      ? getHighestQualityUrl(video)
+      : video[`${quality}_url`];
 
   if (!qualityUrl) {
     console.error(`quality ${quality} not found for ${video.name}`);
@@ -175,6 +178,22 @@ let downloadVideo = async ({ apiKey, video, quality, outDir }) => {
   console.log(`output path: ${outputPath}`);
 
   got.stream(downloadUrl).pipe(fs.createWriteStream(outputPath));
+};
+
+let qualityList = ["hd", "high", "low", "mobile"];
+let getHighestQualityUrl = video => {
+  let highestQualityUrl = null;
+  for (let i = 0; i < qualityList.length; i++) {
+    let quality = qualityList[i];
+    let qualityUrl = video[`${quality}_url`];
+
+    if (qualityUrl) {
+      highestQualityUrl = qualityUrl;
+      break;
+    }
+  }
+
+  return highestQualityUrl;
 };
 
 let cachePath = path.resolve(process.cwd(), "gb-dl-cache.json");

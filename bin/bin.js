@@ -27,7 +27,11 @@ program
   )
   .option("--only-premium", "show only premium versions")
   .option("--only-free", "show only free versions")
-  .option("--quality <hd/high/low>", "video quality to download", "hd")
+  .option(
+    "--quality <highest/hd/high/low/mobile>",
+    "video quality to download",
+    "highest"
+  )
   .option("--out-dir <path>", "specify output directory", "./")
   .option("--info", "show selected video info instead of downloading")
   .option("--clean", "ignore previous cache results for query")

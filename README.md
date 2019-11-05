@@ -20,7 +20,7 @@
 | video-number | Number                                    | false    | Zero-based video index for provided show (most recent video is `0`). Defaults to `0`. |
 | only-premium |                                           | false    | Filter search to only premium videos.                                                 |
 | only-free    |                                           | false    | Filter search to only free videos.                                                    |
-| quality      | hd/high/low                               | false    | Specify quality of video to download. Defaults to HD.                                 |
+| quality      | highest/hd/high/low/mobile                | false    | Specify quality of video to download. Defaults to highest.                            |
 | out-dir      | String                                    | false    | Specify output directory for video. Defaults to current working directory.            |
 | info         |                                           | false    | Output video information instead of download.                                         |
 | clean        |                                           | false    | Ignore cache when making query.                                                       |
