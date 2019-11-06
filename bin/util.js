@@ -12,15 +12,18 @@ let rateLimit = () => {
     if (!LAST_FETCH_CALL) {
       LAST_FETCH_CALL = Date.now();
       resolve();
+      return;
     }
 
     let diffMs = Date.now() - LAST_FETCH_CALL;
 
     if (diffMs < RATE_LIMIT_MS) {
+      let delayMs = Math.max(RATE_LIMIT_MS - diffMs, 0);
+      console.log(`delaying request for ${delayMs}ms`);
       setTimeout(() => {
         LAST_FETCH_CALL = Date.now();
         resolve();
-      }, RATE_LIMIT_MS - diffMs);
+      }, delayMs);
     }
   });
 };
@@ -47,7 +50,6 @@ let getVideoSearch = async ({
   showRegexString,
   clean
 }) => {
-  await rateLimit();
   let result = null;
   let showRegex = new RegExp(showRegexString);
   let videoRegex = new RegExp(videoRegexString);
@@ -63,6 +65,7 @@ let getVideoSearch = async ({
     return cacheData;
   }
 
+  await rateLimit();
   console.log(`fetching ${requestUrl}`);
   let { body } = await got(requestUrl, { json: true });
 
@@ -91,7 +94,6 @@ let getVideoSearch = async ({
 };
 
 let getShow = async ({ apiKey, regexString, clean }) => {
-  await rateLimit();
   let result = null;
   let regex = new RegExp(regexString);
   let offset = 0;
@@ -120,7 +122,6 @@ let getShow = async ({ apiKey, regexString, clean }) => {
 };
 
 let getVideo = async ({ apiKey, regexString, videoNumber, filters, clean }) => {
-  await rateLimit();
   let result = null;
 
   if (regexString) {
@@ -179,6 +180,7 @@ let getShowsResponse = async ({ apiKey, limit, offset, clean }) => {
     return cacheData;
   }
 
+  await rateLimit();
   console.log(`fetching ${requestUrl}`);
   let { body } = await got(requestUrl, { json: true });
 
@@ -211,6 +213,7 @@ let getVideosResponse = async ({ apiKey, offset, limit, filters, clean }) => {
     return cacheData;
   }
 
+  await rateLimit();
   console.log(`fetching ${requestUrl}`);
   let { body } = await got(requestUrl, { json: true });
 
@@ -252,6 +255,7 @@ let downloadVideo = async ({ apiKey, video, quality, outDir }) => {
   console.log(`video url: ${downloadUrl}`);
   console.log(`output path: ${outputPath}`);
 
+  await rateLimit();
   got.stream(downloadUrl).pipe(fs.createWriteStream(outputPath));
 };
 
