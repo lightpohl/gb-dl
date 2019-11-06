@@ -3,6 +3,7 @@ let fs = require("fs");
 let path = require("path");
 let filenamify = require("filenamify");
 
+let MAX_DEPTH = 10;
 let DEFAULT_LIMIT = 100;
 let RATE_LIMIT_MS = 1000;
 let LAST_FETCH_CALL = null;
@@ -42,14 +43,23 @@ let videosFieldList = [
   "site_detail_url",
   "hd_url",
   "high_url",
-  "low_url"
+  "low_url",
+  "premium"
 ];
 
 let searchFieldList = [...videosFieldList, "video_show"];
 let searchFieldListParam = `&field_list=${searchFieldList.join(",")}`;
 let baseSearchUrl = `https://www.giantbomb.com/api/search?format=json&resources=video${searchFieldListParam}`;
 
-let getVideoSearch = async ({ apiKey, videoName, showName, clean, debug }) => {
+let getVideoSearch = async ({
+  apiKey,
+  videoName,
+  showName,
+  isOnlyFree,
+  isOnlyPremium,
+  clean,
+  debug
+}) => {
   let result = null;
   let showRegex = showName ? new RegExp(showName, "ig") : null;
   let videoRegex = videoName ? new RegExp(videoName, "ig") : null;
@@ -107,6 +117,14 @@ let getVideoSearch = async ({ apiKey, videoName, showName, clean, debug }) => {
       return false;
     }
 
+    if (isOnlyPremium && !video.premium) {
+      return false;
+    }
+
+    if (isOnlyFree && video.premium) {
+      return false;
+    }
+
     return true;
   });
 
@@ -142,12 +160,13 @@ let getShow = async ({ apiKey, name, clean, debug }) => {
   return result;
 };
 
-let getVideo = async ({ apiKey, name, videoNumber, filters, clean, debug }) => {
+let getVideo = async ({ apiKey, name, number, filters, clean, debug }) => {
   let result = null;
 
   if (name) {
     let nameRegex = new RegExp(name, "ig");
     let totalVideos = Infinity;
+    let attempts = 0;
     let offset = 0;
 
     while (!result && offset < totalVideos) {
@@ -168,12 +187,19 @@ let getVideo = async ({ apiKey, name, videoNumber, filters, clean, debug }) => {
       });
 
       offset += DEFAULT_LIMIT;
+      attempts += 1;
+
+      if (attempts === MAX_DEPTH) {
+        console.error("max search depth exceeded");
+        console.log("suggestion: refine search params");
+        process.exit(1);
+      }
     }
   } else {
     let response = await getVideosResponse({
       apiKey,
       limit: 1,
-      offset: videoNumber,
+      offset: number,
       filters,
       clean,
       debug

@@ -56,6 +56,8 @@ let main = async () => {
       apiKey: program.apiKey,
       videoName: program.videoName,
       showName: program.showName,
+      isOnlyPremium: program.onlyPremium,
+      isOnlyFree: program.onlyFree,
       clean: program.clean,
       debug: program.debug
     });
@@ -77,16 +79,19 @@ let main = async () => {
     return;
   }
 
-  let show = program.showName
-    ? await getShow({
-        apiKey: program.apiKey,
-        name: program.showName,
-        clean: program.clean,
-        debug: program.debug
-      })
-    : null;
+  if (program.showName) {
+    let show = await getShow({
+      apiKey: program.apiKey,
+      name: program.showName,
+      clean: program.clean,
+      debug: program.debug
+    });
 
-  if (show) {
+    if (!show) {
+      console.error(`no show found for ${program.showName}`);
+      process.exit(1);
+    }
+
     filters.push(`video_show:${show.id}`);
   }
 
@@ -94,7 +99,7 @@ let main = async () => {
     filters,
     apiKey: program.apiKey,
     name: program.videoName,
-    videoNumber: program.videoNumber,
+    number: program.videoNumber,
     clean: program.clean,
     debug: program.debug
   });
