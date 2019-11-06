@@ -27,6 +27,12 @@
 | version      |                                           | false    | Output the version number.                                                            |
 | help         |                                           | false    | Output usage information.                                                             |
 
+## Rate Limiting
+
+- **The Giant Bomb API has an account download limit of 100 videos per day.**
+- A one second delay between requests is added to avoid flooding the Giant Bomb API.
+- `gb-dl` may need to make a few requests to find a video, so expect a short delay after starting.
+
 ## Caching
 
 - `gb-dl` will generate a `gb-dl-cache.json` in the current working directory when run in order to avoid hitting the Giant Bomb API repeatedly for the same set of data.
