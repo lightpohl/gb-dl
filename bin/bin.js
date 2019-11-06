@@ -12,18 +12,12 @@ program
     "--api-key <key>",
     "required: individual API key for the Giant Bomb API"
   )
-  .option(
-    "--show-regex <string>",
-    "required: search shows for first show title that matches regex"
-  )
+  .option("--show-name <string>", "show to filter search by")
+  .option("--video-name <string>", "video name to find")
   .option(
     "--video-number <number>",
     "video number to download (most recent = 0)",
     0
-  )
-  .option(
-    "--video-regex <string>",
-    "search show for first video name that matches regex"
   )
   .option("--only-premium", "show only premium versions")
   .option("--only-free", "show only free versions")
@@ -41,12 +35,11 @@ program
 if (!program.apiKey) {
   console.error("--api-key not provided");
   process.exit(1);
-} else if (!program.showRegex) {
-  console.error("--show-regex not provided");
+} else if (!program.videoName && !program.videoNumber) {
+  console.error("--video-name or --video-number must be provided");
   process.exit(1);
-} else if (!program.videoRegex && !program.videoNumber) {
-  console.error("--video-regex or --video-number must be provided");
-  process.exit(1);
+} else if (program.videoNumber) {
+  console.error("--show-name must be provided if using --video-number");
 }
 
 if (program.onlyPremium) {
@@ -58,46 +51,49 @@ if (program.onlyPremium) {
 let main = async () => {
   let searchResult = null;
 
-  if (program.showRegex && program.videoRegex) {
+  if (program.videoName) {
     searchResult = await getVideoSearch({
       apiKey: program.apiKey,
-      videoRegexString: program.videoRegex,
-      showRegexString: program.showRegex,
+      videoName: program.videoName,
+      showName: program.showName,
       clean: program.clean,
       debug: program.debug
     });
   }
 
   if (searchResult) {
-    await downloadVideo({
-      video: searchResult,
-      apiKey: program.apiKey,
-      outDir: program.outDir,
-      quality: program.quality,
-      debug: program.debug
-    });
+    if (program.info) {
+      console.log(searchResult);
+    } else {
+      await downloadVideo({
+        video: searchResult,
+        apiKey: program.apiKey,
+        outDir: program.outDir,
+        quality: program.quality,
+        debug: program.debug
+      });
+    }
 
     return;
   }
 
-  let show = await getShow({
-    apiKey: program.apiKey,
-    regexString: program.showRegex,
-    clean: program.clean,
-    debug: program.debug
-  });
+  let show = program.showName
+    ? await getShow({
+        apiKey: program.apiKey,
+        name: program.showName,
+        clean: program.clean,
+        debug: program.debug
+      })
+    : null;
 
-  if (!show) {
-    console.error("no show found for query");
-    process.exit(1);
+  if (show) {
+    filters.push(`video_show:${show.id}`);
   }
-
-  filters.push(`video_show:${show.id}`);
 
   const video = await getVideo({
     filters,
     apiKey: program.apiKey,
-    regexString: program.videoRegex,
+    name: program.videoName,
     videoNumber: program.videoNumber,
     clean: program.clean,
     debug: program.debug

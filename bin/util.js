@@ -16,7 +16,6 @@ let rateLimit = debug => {
     }
 
     let diffMs = Date.now() - LAST_FETCH_CALL;
-
     if (diffMs < RATE_LIMIT_MS) {
       let delayMs = Math.max(RATE_LIMIT_MS - diffMs, 0);
 
@@ -28,6 +27,8 @@ let rateLimit = debug => {
         LAST_FETCH_CALL = Date.now();
         resolve();
       }, delayMs);
+    } else {
+      resolve();
     }
   });
 };
@@ -48,18 +49,13 @@ let searchFieldList = [...videosFieldList, "video_show"];
 let searchFieldListParam = `&field_list=${searchFieldList.join(",")}`;
 let baseSearchUrl = `https://www.giantbomb.com/api/search?format=json&resources=video${searchFieldListParam}`;
 
-let getVideoSearch = async ({
-  apiKey,
-  videoRegexString,
-  showRegexString,
-  clean,
-  debug
-}) => {
+let getVideoSearch = async ({ apiKey, videoName, showName, clean, debug }) => {
   let result = null;
-  let showRegex = new RegExp(showRegexString);
-  let videoRegex = new RegExp(videoRegexString);
+  let showRegex = showName ? new RegExp(showName, "ig") : null;
+  let videoRegex = videoName ? new RegExp(videoName, "ig") : null;
 
-  let queryParam = `&query="${videoRegexString}"`;
+  let query = showRegex ? `${showName} ${videoName}` : videoName;
+  let queryParam = `&query="${query}"`;
   let apiKeyParam = `&api_key=${apiKey}`;
 
   let requestUrl = `${baseSearchUrl}${apiKeyParam}${queryParam}`;
@@ -95,19 +91,31 @@ let getVideoSearch = async ({
 
   let { results } = body;
   result = results.find(video => {
-    return (
-      videoRegex.test(video.name) &&
+    if (!videoRegex.test(video.name)) {
+      return false;
+    }
+
+    if (showRegex && !video.video_show) {
+      return false;
+    }
+
+    if (
       video.video_show &&
-      showRegex.test(video.video_show.title)
-    );
+      showRegex &&
+      !showRegex.test(video.video_show.title)
+    ) {
+      return false;
+    }
+
+    return true;
   });
 
   return result;
 };
 
-let getShow = async ({ apiKey, regexString, clean, debug }) => {
+let getShow = async ({ apiKey, name, clean, debug }) => {
   let result = null;
-  let regex = new RegExp(regexString);
+  let regex = new RegExp(name, "ig");
   let offset = 0;
   let limit = DEFAULT_LIMIT;
   let totalShows = Infinity;
@@ -134,18 +142,11 @@ let getShow = async ({ apiKey, regexString, clean, debug }) => {
   return result;
 };
 
-let getVideo = async ({
-  apiKey,
-  regexString,
-  videoNumber,
-  filters,
-  clean,
-  debug
-}) => {
+let getVideo = async ({ apiKey, name, videoNumber, filters, clean, debug }) => {
   let result = null;
 
-  if (regexString) {
-    let nameRegex = new RegExp(regexString);
+  if (name) {
+    let nameRegex = new RegExp(name, "ig");
     let totalVideos = Infinity;
     let offset = 0;
 
