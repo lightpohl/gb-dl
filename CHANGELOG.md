@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/lightpohl/gb-dl/compare/v1.2.0...v2.0.0) (2019-11-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* use --show-name instead of --show-regex
+* use --video-name instead of --video-regex
+* find partial matches, ignore case
+
+fix: rate limiter would sometimes not return
+
+### Features
+
+* simplify API for names, make options more flexible ([1a896f8](https://github.com/lightpohl/gb-dl/commit/1a896f8f716d6764fc1633f0ba1dbe17b641733a))
+
 ## [1.2.0](https://github.com/lightpohl/gb-dl/compare/v1.1.0...v1.2.0) (2019-11-06)
 
 
