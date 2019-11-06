@@ -35,6 +35,7 @@ program
   .option("--out-dir <path>", "specify output directory", "./")
   .option("--info", "show selected video info instead of downloading")
   .option("--clean", "ignore previous cache results for query")
+  .option("--debug", "show debug statements")
   .parse(process.argv);
 
 if (!program.apiKey) {
@@ -62,7 +63,8 @@ let main = async () => {
       apiKey: program.apiKey,
       videoRegexString: program.videoRegex,
       showRegexString: program.showRegex,
-      clean: program.clean
+      clean: program.clean,
+      debug: program.debug
     });
   }
 
@@ -71,7 +73,8 @@ let main = async () => {
       video: searchResult,
       apiKey: program.apiKey,
       outDir: program.outDir,
-      quality: program.quality
+      quality: program.quality,
+      debug: program.debug
     });
 
     return;
@@ -80,7 +83,8 @@ let main = async () => {
   let show = await getShow({
     apiKey: program.apiKey,
     regexString: program.showRegex,
-    clean: program.clean
+    clean: program.clean,
+    debug: program.debug
   });
 
   if (!show) {
@@ -95,7 +99,8 @@ let main = async () => {
     apiKey: program.apiKey,
     regexString: program.videoRegex,
     videoNumber: program.videoNumber,
-    clean: program.clean
+    clean: program.clean,
+    debug: program.debug
   });
 
   if (!video) {
@@ -112,7 +117,8 @@ let main = async () => {
     video,
     apiKey: program.apiKey,
     outDir: program.outDir,
-    quality: program.quality
+    quality: program.quality,
+    debug: program.debug
   });
 };
 

@@ -7,7 +7,7 @@ let DEFAULT_LIMIT = 100;
 let RATE_LIMIT_MS = 1000;
 let LAST_FETCH_CALL = null;
 
-let rateLimit = () => {
+let rateLimit = debug => {
   return new Promise(resolve => {
     if (!LAST_FETCH_CALL) {
       LAST_FETCH_CALL = Date.now();
@@ -19,7 +19,11 @@ let rateLimit = () => {
 
     if (diffMs < RATE_LIMIT_MS) {
       let delayMs = Math.max(RATE_LIMIT_MS - diffMs, 0);
-      console.log(`delaying request for ${delayMs}ms`);
+
+      if (debug) {
+        console.log(`delaying request for ${delayMs}ms`);
+      }
+
       setTimeout(() => {
         LAST_FETCH_CALL = Date.now();
         resolve();
@@ -48,7 +52,8 @@ let getVideoSearch = async ({
   apiKey,
   videoRegexString,
   showRegexString,
-  clean
+  clean,
+  debug
 }) => {
   let result = null;
   let showRegex = new RegExp(showRegexString);
@@ -61,16 +66,23 @@ let getVideoSearch = async ({
 
   let cacheData = clean ? null : readCache(requestUrl);
   if (cacheData) {
-    console.log(`cache result found for ${requestUrl}`);
+    if (debug) {
+      console.log(`cache result found for ${requestUrl}`);
+    }
+
     return cacheData;
   }
 
-  await rateLimit();
-  console.log(`fetching ${requestUrl}`);
+  await rateLimit(debug);
+
+  if (debug) {
+    console.log(`fetching ${requestUrl}`);
+  }
+
   let { body } = await got(requestUrl, { json: true });
 
   if (!body) {
-    console.error("no response body");
+    console.error("search: no response body");
     return null;
   }
 
@@ -93,7 +105,7 @@ let getVideoSearch = async ({
   return result;
 };
 
-let getShow = async ({ apiKey, regexString, clean }) => {
+let getShow = async ({ apiKey, regexString, clean, debug }) => {
   let result = null;
   let regex = new RegExp(regexString);
   let offset = 0;
@@ -105,7 +117,8 @@ let getShow = async ({ apiKey, regexString, clean }) => {
       apiKey,
       limit,
       offset,
-      clean
+      clean,
+      debug
     });
 
     totalShows = response.number_of_total_results;
@@ -121,7 +134,14 @@ let getShow = async ({ apiKey, regexString, clean }) => {
   return result;
 };
 
-let getVideo = async ({ apiKey, regexString, videoNumber, filters, clean }) => {
+let getVideo = async ({
+  apiKey,
+  regexString,
+  videoNumber,
+  filters,
+  clean,
+  debug
+}) => {
   let result = null;
 
   if (regexString) {
@@ -135,6 +155,7 @@ let getVideo = async ({ apiKey, regexString, videoNumber, filters, clean }) => {
         offset,
         filters,
         clean,
+        debug,
         limit: DEFAULT_LIMIT
       });
 
@@ -153,7 +174,8 @@ let getVideo = async ({ apiKey, regexString, videoNumber, filters, clean }) => {
       limit: 1,
       offset: videoNumber,
       filters,
-      clean
+      clean,
+      debug
     });
 
     let { results } = response;
@@ -167,7 +189,7 @@ let showsFieldList = ["id", "title"];
 let showsFieldListParam = `&field_list${showsFieldList.join(",")}`;
 let baseShowsUrl = `https://www.giantbomb.com/api/video_shows?format=json${showsFieldListParam}`;
 
-let getShowsResponse = async ({ apiKey, limit, offset, clean }) => {
+let getShowsResponse = async ({ apiKey, limit, offset, clean, debug }) => {
   let apiKeyParam = `&api_key=${apiKey}`;
   let limitParam = `&limit=${limit}`;
   let offsetParam = `&offset=${offset}`;
@@ -176,16 +198,23 @@ let getShowsResponse = async ({ apiKey, limit, offset, clean }) => {
 
   let cacheData = clean ? null : readCache(requestUrl);
   if (cacheData) {
-    console.log(`cache result found for ${requestUrl}`);
+    if (debug) {
+      console.log(`cache result found for ${requestUrl}`);
+    }
+
     return cacheData;
   }
 
-  await rateLimit();
-  console.log(`fetching ${requestUrl}`);
+  await rateLimit(debug);
+
+  if (debug) {
+    console.log(`fetching ${requestUrl}`);
+  }
+
   let { body } = await got(requestUrl, { json: true });
 
   if (!body) {
-    console.error("no response body");
+    console.error("shows: no response body");
     process.exit(1);
   }
 
@@ -200,7 +229,14 @@ let getShowsResponse = async ({ apiKey, limit, offset, clean }) => {
 let videosFieldListParam = `&field_list=${videosFieldList.join(",")}`;
 let baseVideosUrl = `https://www.giantbomb.com/api/videos/?format=json${videosFieldListParam}`;
 
-let getVideosResponse = async ({ apiKey, offset, limit, filters, clean }) => {
+let getVideosResponse = async ({
+  apiKey,
+  offset,
+  limit,
+  filters,
+  clean,
+  debug
+}) => {
   let apiKeyParam = `&api_key=${apiKey}`;
   let limitParam = `&limit=${limit}`;
   let offsetParam = `&offset=${offset}`;
@@ -209,16 +245,23 @@ let getVideosResponse = async ({ apiKey, offset, limit, filters, clean }) => {
 
   let cacheData = clean ? null : readCache(requestUrl);
   if (cacheData) {
-    console.log(`cache result found for ${requestUrl}`);
+    if (debug) {
+      console.log(`cache result found for ${requestUrl}`);
+    }
+
     return cacheData;
   }
 
-  await rateLimit();
-  console.log(`fetching ${requestUrl}`);
+  await rateLimit(debug);
+
+  if (debug) {
+    console.log(`fetching ${requestUrl}`);
+  }
+
   let { body } = await got(requestUrl, { json: true });
 
   if (!body) {
-    console.error("no response body");
+    console.error("videos: no response body");
     process.exit(1);
   }
 
@@ -230,7 +273,7 @@ let getVideosResponse = async ({ apiKey, offset, limit, filters, clean }) => {
   return writeCache({ key: requestUrl, data: body });
 };
 
-let downloadVideo = async ({ apiKey, video, quality, outDir }) => {
+let downloadVideo = async ({ apiKey, video, quality, outDir, debug }) => {
   let qualityUrl =
     quality === "highest"
       ? getHighestQualityUrl(video)
@@ -255,7 +298,7 @@ let downloadVideo = async ({ apiKey, video, quality, outDir }) => {
   console.log(`video url: ${downloadUrl}`);
   console.log(`output path: ${outputPath}`);
 
-  await rateLimit();
+  await rateLimit(debug);
   got.stream(downloadUrl).pipe(fs.createWriteStream(outputPath));
 };
 
