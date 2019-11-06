@@ -12,20 +12,20 @@
 
 ## Options
 
-| Option       | Type                                      | Required | Description                                                                           |
-| ------------ | ----------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
-| api-key      | [API Key](https://www.giantbomb.com/api/) | true     | Individual API key for Giant Bomb.                                                    |
-| show-regex   | String                                    | true     | Used to find matching show title. Passed into a `new RegExp()`.                       |
-| video-regex  | String                                    | false    | Used to find matching video title. Passed into a `new RegExp()`.                      |
-| video-number | Number                                    | false    | Zero-based video index for provided show (most recent video is `0`). Defaults to `0`. |
-| only-premium |                                           | false    | Filter search to only premium videos.                                                 |
-| only-free    |                                           | false    | Filter search to only free videos.                                                    |
-| quality      | highest/hd/high/low/mobile                | false    | Specify quality of video to download. Defaults to highest.                            |
-| out-dir      | String                                    | false    | Specify output directory for video. Defaults to current working directory.            |
-| info         |                                           | false    | Output video information instead of download.                                         |
-| clean        |                                           | false    | Ignore cache when making query.                                                       |
-| version      |                                           | false    | Output the version number.                                                            |
-| help         |                                           | false    | Output usage information.                                                             |
+| Option       | Type   | Required | Description                                                                                         |
+| ------------ | ------ | -------- | --------------------------------------------------------------------------------------------------- |
+| api-key      | String | true     | Individual [Giant Bomb API key](https://www.giantbomb.com/api/).                                    |
+| show-regex   | String | true     | Used to find matching show title. Passed into a `new RegExp()`.                                     |
+| video-regex  | String | false    | Used to find matching video title. Passed into a `new RegExp()`.                                    |
+| video-number | Number | false    | Zero-based video index for provided show (most recent video is `0`). Defaults to `0`.               |
+| only-premium |        | false    | Filter search to only premium videos.                                                               |
+| only-free    |        | false    | Filter search to only free videos.                                                                  |
+| quality      | String | false    | Specify quality of video to download. Defaults to highest. Other options: hd, high, low and mobile. |
+| out-dir      | String | false    | Specify output directory for video. Defaults to current working directory.                          |
+| info         |        | false    | Output video information instead of download.                                                       |
+| clean        |        | false    | Ignore cache when making query.                                                                     |
+| version      |        | false    | Output the version number.                                                                          |
+| help         |        | false    | Output usage information.                                                                           |
 
 ## Rate Limiting
 
