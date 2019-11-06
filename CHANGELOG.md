@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/lightpohl/gb-dl/compare/v2.0.0...v2.0.1) (2019-11-06)
+
+
+### Bug Fixes
+
+* include filters on initial search, add max depth ([28a8274](https://github.com/lightpohl/gb-dl/commit/28a82744fe8ad8adc866abf810bdaaafa7ca2fc0))
+
 ## [2.0.0](https://github.com/lightpohl/gb-dl/compare/v1.2.0...v2.0.0) (2019-11-06)
 
 
