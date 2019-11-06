@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/lightpohl/gb-dl/compare/v1.1.0...v1.2.0) (2019-11-06)
+
+
+### Features
+
+* add debug flag ([a814457](https://github.com/lightpohl/gb-dl/commit/a814457047ade8ce4eeb9ce38bffb18c4aa33b46))
+
+
+### Bug Fixes
+
+* add rate limit to all API calls ([4410a9a](https://github.com/lightpohl/gb-dl/commit/4410a9a2c7555d890d5ce2ebb21781ba2f388c62))
+
 ## [1.1.0](https://github.com/lightpohl/gb-dl/compare/v1.0.1...v1.1.0) (2019-11-05)
 
 
