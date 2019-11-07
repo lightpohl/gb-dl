@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.2](https://github.com/lightpohl/gb-dl/compare/v2.0.1...v2.0.2) (2019-11-07)
+
+
+### Bug Fixes
+
+* unable to use --video-number ([6099bcf](https://github.com/lightpohl/gb-dl/commit/6099bcfae1d10be968c922f190e420667bf0153e))
+
 ### [2.0.1](https://github.com/lightpohl/gb-dl/compare/v2.0.0...v2.0.1) (2019-11-06)
 
 
