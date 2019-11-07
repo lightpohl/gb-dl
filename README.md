@@ -12,7 +12,7 @@
 
 ## Options
 
-**Either `--video-name` or `--video-number` must be provided**
+**Either `--video-name` or `--video-number` must be provided.**
 
 | Option       | Type   | Required | Description                                                                                         |
 | ------------ | ------ | -------- | --------------------------------------------------------------------------------------------------- |
@@ -26,6 +26,7 @@
 | out-dir      | String | false    | Specify output directory for video. Defaults to current working directory.                          |
 | info         |        | false    | Output video information instead of download.                                                       |
 | clean        |        | false    | Ignore cache when making query.                                                                     |
+| debug        |        | false    | show debug statements                                                                               |
 | version      |        | false    | Output the version number.                                                                          |
 | help         |        | false    | Output usage information.                                                                           |
 
