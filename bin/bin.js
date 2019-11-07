@@ -38,8 +38,6 @@ if (!program.apiKey) {
 } else if (!program.videoName && !program.videoNumber) {
   console.error("--video-name or --video-number must be provided");
   process.exit(1);
-} else if (program.videoNumber) {
-  console.error("--show-name must be provided if using --video-number");
 }
 
 if (program.onlyPremium) {
