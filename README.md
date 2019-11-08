@@ -4,6 +4,8 @@
 
 ## How to Use
 
+**[Node Required](https://nodejs.org/en/)**
+
 `npx gb-dl --api-key <YOUR_API_KEY> --show-name <string> --video-name <string>`
 
 `npx gb-dl --api-key <YOUR_API_KEY> --show-name "Giant Bombcast" --video-name "Giant Bombcast 607"`
