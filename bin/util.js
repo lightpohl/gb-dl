@@ -97,8 +97,6 @@ let getVideoSearch = async ({
     return null;
   }
 
-  writeCache({ key: requestUrl, data: body });
-
   let { results } = body;
   result = results.find(video => {
     if (!videoRegex.test(video.name)) {
@@ -128,7 +126,11 @@ let getVideoSearch = async ({
     return true;
   });
 
-  return result;
+  if (!result) {
+    return null;
+  }
+
+  return writeCache({ key: requestUrl, data: result });
 };
 
 let getShow = async ({ apiKey, name, clean, debug }) => {
@@ -378,7 +380,7 @@ let writeCache = ({ key, data }) => {
     ts: Date.now()
   };
 
-  fs.writeFileSync(cachePath, JSON.stringify(cache));
+  fs.writeFileSync(cachePath, JSON.stringify(cache, null, 4));
   return data;
 };
 
