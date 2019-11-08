@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.1](https://github.com/lightpohl/gb-dl/compare/v2.1.0...v2.1.1) (2019-11-08)
+
+
+### Bug Fixes
+
+* do not cache bad search result ([aee73a7](https://github.com/lightpohl/gb-dl/commit/aee73a7ba6ae239f04226caabf7d638c64cc6a4a))
+
 ## [2.1.0](https://github.com/lightpohl/gb-dl/compare/v2.0.2...v2.1.0) (2019-11-08)
 
 
