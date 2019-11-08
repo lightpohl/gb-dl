@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/lightpohl/gb-dl/compare/v2.0.2...v2.1.0) (2019-11-08)
+
+
+### Features
+
+* add download progress output ([807b931](https://github.com/lightpohl/gb-dl/commit/807b931fdbf350cb2f6df987a0603de32ddadf0e))
+
 ### [2.0.2](https://github.com/lightpohl/gb-dl/compare/v2.0.1...v2.0.2) (2019-11-07)
 
 
