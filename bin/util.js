@@ -300,6 +300,21 @@ let getVideosResponse = async ({
   return writeCache({ key: requestUrl, data: body });
 };
 
+let BYTES_IN_MB = 1000000;
+let printProgress = ({ percent, total }) => {
+  let line = `downloading... ${percent.toFixed(2)}%`;
+
+  if (total) {
+    let totalMBs = total / BYTES_IN_MB;
+    let roundedTotalMbs = totalMBs.toFixed(2);
+    line += ` of ${roundedTotalMbs} MB`;
+  }
+
+  process.stdout.clearLine();
+  process.stdout.cursorTo(0);
+  process.stdout.write(line);
+};
+
 let downloadVideo = async ({ apiKey, video, quality, outDir, debug }) => {
   let qualityUrl =
     quality === "highest"
@@ -326,7 +341,12 @@ let downloadVideo = async ({ apiKey, video, quality, outDir, debug }) => {
   console.log(`output path: ${outputPath}`);
 
   await rateLimit(debug);
-  got.stream(downloadUrl).pipe(fs.createWriteStream(outputPath));
+  got
+    .stream(downloadUrl)
+    .on("downloadProgress", progress => {
+      printProgress(progress);
+    })
+    .pipe(fs.createWriteStream(outputPath));
 };
 
 let qualityList = ["hd", "high", "low", "mobile"];
