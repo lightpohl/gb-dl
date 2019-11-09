@@ -322,6 +322,10 @@ let printProgress = ({ percent, total }) => {
   }
 };
 
+let endPrintProgress = () => {
+  process.stdout.write("\n");
+};
+
 let downloadVideo = async ({ apiKey, video, quality, outDir, debug }) => {
   let qualityUrl =
     quality === "highest"
@@ -352,6 +356,10 @@ let downloadVideo = async ({ apiKey, video, quality, outDir, debug }) => {
     .stream(downloadUrl)
     .on("downloadProgress", progress => {
       printProgress(progress);
+    })
+    .on("end", () => {
+      endPrintProgress();
+      console.log("download complete!");
     })
     .pipe(fs.createWriteStream(outputPath));
 };
