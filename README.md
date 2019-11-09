@@ -48,3 +48,5 @@
 - Cached responses will be used for one hour.
 - Adding `--clean` to the command will bypass the cache.
 - Expired cache results will be removed on script start.
+
+## [More Examples](./examples)
