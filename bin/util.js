@@ -303,8 +303,10 @@ let getVideosResponse = async ({
 };
 
 let BYTES_IN_MB = 1000000;
+let currentProgressLine = "";
 let printProgress = ({ percent, total }) => {
-  let line = `downloading... ${percent.toFixed(2)}%`;
+  let percentRounded = (percent * 100).toFixed(0);
+  let line = `downloading... ${percentRounded}%`;
 
   if (total) {
     let totalMBs = total / BYTES_IN_MB;
@@ -312,9 +314,12 @@ let printProgress = ({ percent, total }) => {
     line += ` of ${roundedTotalMbs} MB`;
   }
 
-  process.stdout.clearLine();
-  process.stdout.cursorTo(0);
-  process.stdout.write(line);
+  if (line !== currentProgressLine) {
+    process.stdout.clearLine();
+    process.stdout.cursorTo(0);
+    process.stdout.write(line);
+    currentProgressLine = line;
+  }
 };
 
 let downloadVideo = async ({ apiKey, video, quality, outDir, debug }) => {
