@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.2](https://github.com/lightpohl/gb-dl/compare/v2.1.1...v2.1.2) (2019-11-09)
+
+
+### Bug Fixes
+
+* round progress percentage and remove flicker ([65e1287](https://github.com/lightpohl/gb-dl/commit/65e1287c81338ed906ec52263f35338dffee8004))
+
 ### [2.1.1](https://github.com/lightpohl/gb-dl/compare/v2.1.0...v2.1.1) (2019-11-08)
 
 
