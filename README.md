@@ -47,4 +47,4 @@
 - `gb-dl` will generate a `gb-dl-cache.json` in the current working directory when run in order to avoid hitting the Giant Bomb API repeatedly for the same set of data.
 - Cached responses will be used for one hour.
 - Adding `--clean` to the command will bypass the cache.
-- Manually deleting the cache is also an option if needed.
+- Expired cache results will be removed on script start.
