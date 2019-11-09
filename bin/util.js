@@ -397,6 +397,13 @@ let writeCache = ({ key, data }) => {
   return data;
 };
 
+let isExpiredTimestamp = ts => {
+  let timeDiffMs = Date.now() - ts;
+  let timeDiffInMinutes = Math.floor(timeDiffMs / 1000 / 60);
+
+  return timeDiffInMinutes > 60;
+};
+
 let readCache = key => {
   if (!fs.existsSync(cachePath)) {
     return null;
@@ -410,14 +417,33 @@ let readCache = key => {
 
   let { ts, data } = cache[key];
 
-  let timeDiffMs = Date.now() - ts;
-  let timeDiffInMinutes = Math.floor(timeDiffMs / 1000 / 60);
-
-  if (timeDiffInMinutes > 60) {
+  if (isExpiredTimestamp(ts)) {
     return null;
   }
 
   return data;
+};
+
+let trimCache = debug => {
+  if (!fs.existsSync(cachePath)) {
+    return;
+  }
+
+  let cache = JSON.parse(fs.readFileSync(cachePath));
+  let trimmedCache = Object.keys(cache).reduce((acc, key) => {
+    let cacheItem = cache[key];
+
+    if (isExpiredTimestamp(cacheItem.ts)) {
+      if (debug) {
+        console.log(`trimming cache result for ${key}`);
+      }
+      return acc;
+    }
+
+    return Object.assign(acc, { [key]: cacheItem });
+  }, {});
+
+  fs.writeFileSync(cachePath, JSON.stringify(trimmedCache, null, 4));
 };
 
 module.exports = {
@@ -426,5 +452,6 @@ module.exports = {
   getVideo,
   getShowsResponse,
   getVideosResponse,
-  downloadVideo
+  downloadVideo,
+  trimCache
 };

@@ -2,7 +2,13 @@
 
 let program = require("commander");
 let { version } = require("../package.json");
-let { getVideoSearch, getShow, getVideo, downloadVideo } = require("./util");
+let {
+  getVideoSearch,
+  getShow,
+  getVideo,
+  downloadVideo,
+  trimCache
+} = require("./util");
 
 let filters = [];
 
@@ -45,6 +51,8 @@ if (program.onlyPremium) {
 } else if (program.onlyFree) {
   filters.push("premium:false");
 }
+
+trimCache(program.debug);
 
 let main = async () => {
   let searchResult = null;
