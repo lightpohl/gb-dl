@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/lightpohl/gb-dl/compare/v2.1.3...v2.2.0) (2019-11-09)
+
+
+### Features
+
+* check if out directory exists on script start ([6391008](https://github.com/lightpohl/gb-dl/commit/63910080e909decebf52a0de811e1453a3b3e52c))
+* trim cache on script start ([f96b0d6](https://github.com/lightpohl/gb-dl/commit/f96b0d66f9cc70dd35d6fcba125a1fee91375a25))
+
 ### [2.1.3](https://github.com/lightpohl/gb-dl/compare/v2.1.2...v2.1.3) (2019-11-09)
 
 
