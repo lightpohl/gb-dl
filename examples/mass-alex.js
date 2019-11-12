@@ -12,7 +12,7 @@
 */
 let execSync = require("child_process").execSync;
 
-// Replace `YOUR_API_KEY` with the key from https://www.giantbomb.com/api.
+// Replace `YOUR_API_KEY` with the key from https://www.giantbomb.com/api
 let apiKey = "YOUR_API_KEY";
 
 /*
