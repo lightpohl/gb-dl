@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/lightpohl/gb-dl/compare/v2.2.0...v2.3.0) (2019-11-13)
+
+
+### Features
+
+* add --archive flag option ([654ffeb](https://github.com/lightpohl/gb-dl/commit/654ffeb23e0eb938ce2ad5c9eb5192aa92ba8e53))
+
 ## [2.2.0](https://github.com/lightpohl/gb-dl/compare/v2.1.3...v2.2.0) (2019-11-09)
 
 
