@@ -326,7 +326,14 @@ let endPrintProgress = () => {
   process.stdout.write("\n");
 };
 
-let downloadVideo = async ({ apiKey, video, quality, outDir, debug }) => {
+let downloadVideo = async ({
+  apiKey,
+  video,
+  quality,
+  outDir,
+  debug,
+  archive
+}) => {
   let qualityUrl =
     quality === "highest"
       ? getHighestQualityUrl(video)
@@ -338,6 +345,12 @@ let downloadVideo = async ({ apiKey, video, quality, outDir, debug }) => {
   }
 
   let downloadUrl = `${qualityUrl}?api_key=${apiKey}`;
+
+  if (archive && isInArchive(downloadUrl)) {
+    console.log(`${video.name} at ${quality} quality exists in archive`);
+    console.log("skipping download...");
+    return;
+  }
 
   let safeFilename = filenamify(video.name, { replacement: "_" });
   let fileExt = path.extname(qualityUrl);
@@ -360,6 +373,10 @@ let downloadVideo = async ({ apiKey, video, quality, outDir, debug }) => {
     .on("end", () => {
       endPrintProgress();
       console.log("download complete!");
+
+      if (archive) {
+        writeToArchive(downloadUrl);
+      }
     })
     .pipe(fs.createWriteStream(outputPath));
 };
@@ -444,6 +461,31 @@ let trimCache = debug => {
   }, {});
 
   fs.writeFileSync(cachePath, JSON.stringify(trimmedCache, null, 4));
+};
+
+let archivePath = path.resolve(process.cwd(), "gb-dl-archive.json");
+let writeToArchive = downloadUrl => {
+  let archive = [];
+
+  if (fs.existsSync(archivePath)) {
+    archive = JSON.parse(fs.readFileSync(archivePath));
+  }
+
+  if (!archive.includes(downloadUrl)) {
+    archive.push(downloadUrl);
+  }
+
+  fs.writeFileSync(archivePath, JSON.stringify(archive, null, 4));
+};
+
+let isInArchive = downloadUrl => {
+  if (!fs.existsSync(archivePath)) {
+    return false;
+  }
+
+  let archive = JSON.parse(fs.readFileSync(archivePath));
+
+  return archive.includes(downloadUrl);
 };
 
 module.exports = {

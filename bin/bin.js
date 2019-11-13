@@ -35,6 +35,7 @@ program
   )
   .option("--out-dir <path>", "specify output directory", "./")
   .option("--info", "show selected video info instead of downloading")
+  .option("--archive", "check if video exists in archive before downloading")
   .option("--clean", "ignore previous cache results for query")
   .option("--debug", "show debug statements")
   .parse(process.argv);
@@ -129,6 +130,7 @@ let main = async () => {
     apiKey: program.apiKey,
     outDir: program.outDir,
     quality: program.quality,
+    archive: program.archive,
     debug: program.debug
   });
 };

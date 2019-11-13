@@ -27,6 +27,7 @@
 | quality      | String | false    | Specify quality of video to download. Defaults to highest. Other options: hd, high, low and mobile. |
 | out-dir      | String | false    | Specify output directory for video. Defaults to current working directory.                          |
 | info         |        | false    | Output video information instead of download.                                                       |
+| archive      |        | false    | Check archive before downloading.                                                                   |
 | clean        |        | false    | Ignore cache when making query.                                                                     |
 | debug        |        | false    | show debug statements                                                                               |
 | version      |        | false    | Output the version number.                                                                          |
@@ -48,5 +49,10 @@
 - Cached responses will be used for one hour.
 - Adding `--clean` to the command will bypass the cache.
 - Expired cache results will be removed on script start.
+
+## Archive
+
+- If passed the `--archive` flag, `gb-dl` will generate/use a `gb-dl-archive.json` in the current working directory.
+- Before downloading a video, it'll check if the video was downloaded previously and abort the download if found.
 
 ## [More Examples](./examples)
