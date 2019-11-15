@@ -2,6 +2,7 @@
 
 let fs = require("fs");
 let program = require("commander");
+let dayjs = require("dayjs");
 let { version } = require("../package.json");
 let {
   getVideoSearch,
@@ -34,6 +35,10 @@ program
     "highest"
   )
   .option("--out-dir <path>", "specify output directory", "./")
+  .option(
+    "--date-after <string>",
+    "MM/DD/YYYY to filter video result (inclusive)"
+  )
   .option("--info", "show selected video info instead of downloading")
   .option("--archive", "check if video exists in archive before downloading")
   .option("--clean", "ignore previous cache results for query")
@@ -118,6 +123,21 @@ let main = async () => {
   if (!video) {
     console.error("no video found for query");
     process.exit(1);
+  }
+
+  if (program.dateAfter) {
+    let dateAfter = dayjs(new Date(program.dateAfter));
+    let videoDate = dayjs(new Date(video.publish_date));
+
+    if (
+      !videoDate.isAfter(dateAfter, "day") &&
+      !videoDate.isSame(dateAfter, "day")
+    ) {
+      console.error(
+        `${video.name} was published before ${dateAfter.format("MM/DD/YYYY")}`
+      );
+      process.exit(1);
+    }
   }
 
   if (program.info) {

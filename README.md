@@ -25,6 +25,7 @@
 | only-premium |        | false    | Filter search to only premium videos.                                                               |
 | only-free    |        | false    | Filter search to only free videos.                                                                  |
 | quality      | String | false    | Specify quality of video to download. Defaults to highest. Other options: hd, high, low and mobile. |
+| date-after   | String | false    | Check if video was published after date before downloading (i.e. MM/DD/YYY, inclusive).             |
 | out-dir      | String | false    | Specify output directory for video. Defaults to current working directory.                          |
 | info         |        | false    | Output video information instead of download.                                                       |
 | archive      |        | false    | Check archive before downloading.                                                                   |

@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "commander": "^4.0.0",
+    "dayjs": "^1.8.17",
     "filenamify": "^4.1.0",
     "got": "^9.6.0"
   },
