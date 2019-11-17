@@ -37,7 +37,11 @@ program
   .option("--out-dir <path>", "specify output directory", "./")
   .option(
     "--date-after <string>",
-    "MM/DD/YYYY to filter video result (inclusive)"
+    "MM/DD/YYYY video must be published after (inclusive)"
+  )
+  .option(
+    "--date-before <string>",
+    "MM/DD/YYYY video must be published before (inclusive)"
   )
   .option("--info", "show selected video info instead of downloading")
   .option("--archive", "check if video exists in archive before downloading")
@@ -123,6 +127,21 @@ let main = async () => {
   if (!video) {
     console.error("no video found for query");
     process.exit(1);
+  }
+
+  if (program.dateBefore) {
+    let dateBefore = dayjs(new Date(program.dateBefore));
+    let videoDate = dayjs(new Date(video.publish_date));
+
+    if (
+      !videoDate.isBefore(dateBefore, "day") &&
+      !videoDate.isSame(dateBefore, "day")
+    ) {
+      console.error(
+        `${video.name} was published after ${dateBefore.format("MM/DD/YYYY")}`
+      );
+      process.exit(1);
+    }
   }
 
   if (program.dateAfter) {
