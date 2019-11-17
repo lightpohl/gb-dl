@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/lightpohl/gb-dl/compare/v2.4.0...v2.5.0) (2019-11-17)
+
+
+### Features
+
+* add --date-before flag option ([9fe31c0](https://github.com/lightpohl/gb-dl/commit/9fe31c0d394b77f17afde95960375e16f2fd27be))
+
 ## [2.4.0](https://github.com/lightpohl/gb-dl/compare/v2.3.0...v2.4.0) (2019-11-15)
 
 
