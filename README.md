@@ -14,7 +14,7 @@
 
 ## Options
 
-**API key may be provided via `--api-key` option of `GIANTBOMB_TOKEN` env variable.**
+**API key may be provided via `--api-key` option or `GIANTBOMB_TOKEN` env variable.**
 
 **Either `--video-name` or `--video-number` must be provided.**
 
