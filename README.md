@@ -14,11 +14,13 @@
 
 ## Options
 
+**API key may be provided via `--api-key` option of `GIANTBOMB_TOKEN` env variable.**
+
 **Either `--video-name` or `--video-number` must be provided.**
 
 | Option         | Type   | Required | Description                                                                                         |
 | -------------- | ------ | -------- | --------------------------------------------------------------------------------------------------- |
-| --api-key      | String | true     | Individual [Giant Bomb API key](https://www.giantbomb.com/api/).                                    |
+| --api-key      | String | false\*  | Individual [Giant Bomb API key](https://www.giantbomb.com/api/).                                    |
 | --show-name    | String | false    | Used to find matching show title.                                                                   |
 | --video-name   | String | false\*  | Used to find matching video title.                                                                  |
 | --video-number | Number | false\*  | Zero-based video index for provided show (most recent video is `0`). Defaults to `0`.               |

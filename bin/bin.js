@@ -14,13 +14,15 @@ let {
 } = require("./util");
 let { createParseNumber } = require("./validate");
 
+let { GIANTBOMB_TOKEN } = process.env;
+
 let filters = [];
 
 program
   .version(version)
   .option(
     "--api-key <key>",
-    "required: individual API key for the Giant Bomb API"
+    "individual API key for the Giant Bomb API (GIANTBOMB_TOKEN env var may also be used)"
   )
   .option("--show-name <string>", "show to filter search by")
   .option("--video-name <string>", "video name to find")
@@ -52,7 +54,7 @@ program
   .option("--debug", "show debug statements")
   .parse(process.argv);
 
-if (!program.apiKey) {
+if (!program.apiKey && !GIANTBOMB_TOKEN) {
   console.error("--api-key not provided");
   process.exit(1);
 } else if (!program.videoName && typeof program.videoNumber === "undefined") {
@@ -74,10 +76,11 @@ trimCache(program.debug);
 
 let main = async () => {
   let searchResult = null;
+  let apiKey = program.apiKey || GIANTBOMB_TOKEN;
 
   if (program.videoName) {
     searchResult = await getVideoSearch({
-      apiKey: program.apiKey,
+      apiKey,
       videoName: program.videoName,
       showName: program.showName,
       isOnlyPremium: program.onlyPremium,
@@ -92,8 +95,8 @@ let main = async () => {
       console.log(searchResult);
     } else {
       await downloadVideo({
+        apiKey,
         video: searchResult,
-        apiKey: program.apiKey,
         outDir: program.outDir,
         quality: program.quality,
         debug: program.debug
@@ -105,7 +108,7 @@ let main = async () => {
 
   if (program.showName) {
     let show = await getShow({
-      apiKey: program.apiKey,
+      apiKey,
       name: program.showName,
       clean: program.clean,
       debug: program.debug
@@ -121,7 +124,7 @@ let main = async () => {
 
   const video = await getVideo({
     filters,
-    apiKey: program.apiKey,
+    apiKey,
     name: program.videoName,
     number: program.videoNumber,
     clean: program.clean,
@@ -170,7 +173,7 @@ let main = async () => {
 
   await downloadVideo({
     video,
-    apiKey: program.apiKey,
+    apiKey,
     outDir: program.outDir,
     quality: program.quality,
     archive: program.archive,
