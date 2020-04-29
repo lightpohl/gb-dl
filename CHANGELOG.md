@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/lightpohl/gb-dl/compare/v2.5.0...v2.6.0) (2020-04-29)
+
+
+### Features
+
+* add GIANTBOMB_TOKEN env support ([e5fedd7](https://github.com/lightpohl/gb-dl/commit/e5fedd72593a0284d1ef2a381821cc8e90388e43))
+
+
+### Bug Fixes
+
+* catch more errors from invalid --video-number ([5b7852b](https://github.com/lightpohl/gb-dl/commit/5b7852b72624abd432609daa400847bf167d6e48))
+
 ## [2.5.0](https://github.com/lightpohl/gb-dl/compare/v2.4.0...v2.5.0) (2019-11-17)
 
 
