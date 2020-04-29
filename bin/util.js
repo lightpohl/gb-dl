@@ -1,7 +1,11 @@
+let stream = require("stream");
+let { promisify } = require("util");
 let got = require("got");
 let fs = require("fs");
 let path = require("path");
 let filenamify = require("filenamify");
+
+let pipeline = promisify(stream.pipeline);
 
 let MAX_DEPTH = 10;
 let DEFAULT_LIMIT = 100;
@@ -85,7 +89,7 @@ let getVideoSearch = async ({
     console.log(`fetching ${requestUrl}`);
   }
 
-  let { body } = await got(requestUrl, { json: true });
+  let body = await got(requestUrl).json();
 
   if (!body) {
     console.error("search: no response body");
@@ -240,7 +244,7 @@ let getShowsResponse = async ({ apiKey, limit, offset, clean, debug }) => {
     console.log(`fetching ${requestUrl}`);
   }
 
-  let { body } = await got(requestUrl, { json: true });
+  let body = await got(requestUrl).json();
 
   if (!body) {
     console.error("shows: no response body");
@@ -287,7 +291,7 @@ let getVideosResponse = async ({
     console.log(`fetching ${requestUrl}`);
   }
 
-  let { body } = await got(requestUrl, { json: true });
+  let body = await got(requestUrl).json();
 
   if (!body) {
     console.error("videos: no response body");
@@ -365,20 +369,23 @@ let downloadVideo = async ({
   console.log(`output path: ${outputPath}`);
 
   await rateLimit(debug);
-  got
-    .stream(downloadUrl)
-    .on("downloadProgress", (progress) => {
-      printProgress(progress);
-    })
-    .on("end", () => {
-      endPrintProgress();
-      console.log("download complete!");
+  await pipeline(
+    got
+      .stream(downloadUrl)
+      .on("downloadProgress", (progress) => {
+        printProgress(progress);
+      })
+      .on("end", () => {
+        endPrintProgress();
+      }),
+    fs.createWriteStream(outputPath)
+  );
 
-      if (archive) {
-        writeToArchive(downloadUrl);
-      }
-    })
-    .pipe(fs.createWriteStream(outputPath));
+  console.log("download complete!");
+
+  if (archive) {
+    writeToArchive(downloadUrl);
+  }
 };
 
 let qualityList = ["hd", "high", "low", "mobile"];
