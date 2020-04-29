@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.6.1](https://github.com/lightpohl/gb-dl/compare/v2.6.0...v2.6.1) (2020-04-29)
+
+
+### Bug Fixes
+
+* update got usages for v11 ([e946775](https://github.com/lightpohl/gb-dl/commit/e9467750be3311e093fdc530efde9c5b5456dae1))
+
 ## [2.6.0](https://github.com/lightpohl/gb-dl/compare/v2.5.0...v2.6.0) (2020-04-29)
 
 
