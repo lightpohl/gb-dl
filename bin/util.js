@@ -8,8 +8,8 @@ let DEFAULT_LIMIT = 100;
 let RATE_LIMIT_MS = 1000;
 let LAST_FETCH_CALL = null;
 
-let rateLimit = debug => {
-  return new Promise(resolve => {
+let rateLimit = (debug) => {
+  return new Promise((resolve) => {
     if (!LAST_FETCH_CALL) {
       LAST_FETCH_CALL = Date.now();
       resolve();
@@ -44,7 +44,7 @@ let videosFieldList = [
   "hd_url",
   "high_url",
   "low_url",
-  "premium"
+  "premium",
 ];
 
 let searchFieldList = [...videosFieldList, "video_show"];
@@ -58,7 +58,7 @@ let getVideoSearch = async ({
   isOnlyFree,
   isOnlyPremium,
   clean,
-  debug
+  debug,
 }) => {
   let result = null;
   let showRegex = showName ? new RegExp(showName, "ig") : null;
@@ -98,7 +98,7 @@ let getVideoSearch = async ({
   }
 
   let { results } = body;
-  result = results.find(video => {
+  result = results.find((video) => {
     if (!videoRegex.test(video.name)) {
       return false;
     }
@@ -146,13 +146,13 @@ let getShow = async ({ apiKey, name, clean, debug }) => {
       limit,
       offset,
       clean,
-      debug
+      debug,
     });
 
     totalShows = response.number_of_total_results;
 
     let { results } = response;
-    result = results.find(show => {
+    result = results.find((show) => {
       return regex.test(show.title);
     });
 
@@ -178,13 +178,13 @@ let getVideo = async ({ apiKey, name, number, filters, clean, debug }) => {
         filters,
         clean,
         debug,
-        limit: DEFAULT_LIMIT
+        limit: DEFAULT_LIMIT,
       });
 
       totalVideos = response.number_of_total_results;
 
       let { results } = response;
-      result = results.find(video => {
+      result = results.find((video) => {
         return nameRegex.test(video.name);
       });
 
@@ -204,7 +204,7 @@ let getVideo = async ({ apiKey, name, number, filters, clean, debug }) => {
       offset: number,
       filters,
       clean,
-      debug
+      debug,
     });
 
     let { results } = response;
@@ -264,7 +264,7 @@ let getVideosResponse = async ({
   limit,
   filters,
   clean,
-  debug
+  debug,
 }) => {
   let apiKeyParam = `&api_key=${apiKey}`;
   let limitParam = `&limit=${limit}`;
@@ -332,7 +332,7 @@ let downloadVideo = async ({
   quality,
   outDir,
   debug,
-  archive
+  archive,
 }) => {
   let qualityUrl =
     quality === "highest"
@@ -367,7 +367,7 @@ let downloadVideo = async ({
   await rateLimit(debug);
   got
     .stream(downloadUrl)
-    .on("downloadProgress", progress => {
+    .on("downloadProgress", (progress) => {
       printProgress(progress);
     })
     .on("end", () => {
@@ -382,7 +382,7 @@ let downloadVideo = async ({
 };
 
 let qualityList = ["hd", "high", "low", "mobile"];
-let getHighestQualityUrl = video => {
+let getHighestQualityUrl = (video) => {
   let highestQualityUrl = null;
   for (let i = 0; i < qualityList.length; i++) {
     let quality = qualityList[i];
@@ -407,21 +407,21 @@ let writeCache = ({ key, data }) => {
 
   cache[key] = {
     data,
-    ts: Date.now()
+    ts: Date.now(),
   };
 
   fs.writeFileSync(cachePath, JSON.stringify(cache, null, 4));
   return data;
 };
 
-let isExpiredTimestamp = ts => {
+let isExpiredTimestamp = (ts) => {
   let timeDiffMs = Date.now() - ts;
   let timeDiffInMinutes = Math.floor(timeDiffMs / 1000 / 60);
 
   return timeDiffInMinutes > 60;
 };
 
-let readCache = key => {
+let readCache = (key) => {
   if (!fs.existsSync(cachePath)) {
     return null;
   }
@@ -441,7 +441,7 @@ let readCache = key => {
   return data;
 };
 
-let trimCache = debug => {
+let trimCache = (debug) => {
   if (!fs.existsSync(cachePath)) {
     return;
   }
@@ -464,7 +464,7 @@ let trimCache = debug => {
 };
 
 let archivePath = path.resolve(process.cwd(), "gb-dl-archive.json");
-let writeToArchive = downloadUrl => {
+let writeToArchive = (downloadUrl) => {
   let archive = [];
 
   if (fs.existsSync(archivePath)) {
@@ -478,7 +478,7 @@ let writeToArchive = downloadUrl => {
   fs.writeFileSync(archivePath, JSON.stringify(archive, null, 4));
 };
 
-let isInArchive = downloadUrl => {
+let isInArchive = (downloadUrl) => {
   if (!fs.existsSync(archivePath)) {
     return false;
   }
@@ -495,5 +495,5 @@ module.exports = {
   getShowsResponse,
   getVideosResponse,
   downloadVideo,
-  trimCache
+  trimCache,
 };

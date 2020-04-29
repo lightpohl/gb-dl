@@ -10,7 +10,7 @@ let {
   getShow,
   getVideo,
   downloadVideo,
-  trimCache
+  trimCache,
 } = require("./util");
 let { createParseNumber } = require("./validate");
 
@@ -86,7 +86,7 @@ let main = async () => {
       isOnlyPremium: program.onlyPremium,
       isOnlyFree: program.onlyFree,
       clean: program.clean,
-      debug: program.debug
+      debug: program.debug,
     });
   }
 
@@ -99,7 +99,7 @@ let main = async () => {
         video: searchResult,
         outDir: program.outDir,
         quality: program.quality,
-        debug: program.debug
+        debug: program.debug,
       });
     }
 
@@ -111,7 +111,7 @@ let main = async () => {
       apiKey,
       name: program.showName,
       clean: program.clean,
-      debug: program.debug
+      debug: program.debug,
     });
 
     if (!show) {
@@ -128,7 +128,7 @@ let main = async () => {
     name: program.videoName,
     number: program.videoNumber,
     clean: program.clean,
-    debug: program.debug
+    debug: program.debug,
   });
 
   if (!video) {
@@ -177,7 +177,7 @@ let main = async () => {
     outDir: program.outDir,
     quality: program.quality,
     archive: program.archive,
-    debug: program.debug
+    debug: program.debug,
   });
 };
 

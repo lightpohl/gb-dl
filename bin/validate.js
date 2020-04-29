@@ -1,5 +1,5 @@
 let createParseNumber = ({ min, name, required = true }) => {
-  return value => {
+  return (value) => {
     if (!value && !required) {
       return undefined;
     }
@@ -23,5 +23,5 @@ let createParseNumber = ({ min, name, required = true }) => {
 };
 
 module.exports = {
-  createParseNumber
+  createParseNumber,
 };
