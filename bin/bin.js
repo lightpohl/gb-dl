@@ -3,6 +3,7 @@
 let fs = require("fs");
 let program = require("commander");
 let dayjs = require("dayjs");
+
 let { version } = require("../package.json");
 let {
   getVideoSearch,
@@ -11,6 +12,7 @@ let {
   downloadVideo,
   trimCache
 } = require("./util");
+let { createParseNumber } = require("./validate");
 
 let filters = [];
 
@@ -25,6 +27,7 @@ program
   .option(
     "--video-number <number>",
     "video number to download (most recent = 0)",
+    createParseNumber({ min: 0, name: "--video-number" }),
     0
   )
   .option("--only-premium", "show only premium versions")
@@ -52,7 +55,8 @@ program
 if (!program.apiKey) {
   console.error("--api-key not provided");
   process.exit(1);
-} else if (!program.videoName && !program.videoNumber) {
+} else if (!program.videoName && typeof program.videoNumber === "undefined") {
+  console.log(program.videoName, program.videoNumber);
   console.error("--video-name or --video-number must be provided");
   process.exit(1);
 } else if (!fs.existsSync(program.outDir)) {
