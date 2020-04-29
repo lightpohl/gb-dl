@@ -9,8 +9,7 @@
   },
   "lint-staged": {
     "*.{js,json,md}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "keywords": [
@@ -31,19 +30,19 @@
   "author": "Joshua Pohl",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^6.6.0",
+    "eslint": "^6.8.0",
     "eslint-config-defaults": "^9.0.0",
-    "eslint-config-prettier": "^6.5.0",
-    "husky": "^3.0.9",
-    "lint-staged": "^9.4.2",
-    "prettier": "^1.18.2",
-    "standard-version": "^7.0.0"
+    "eslint-config-prettier": "^6.11.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.0",
+    "prettier": "^2.0.5",
+    "standard-version": "^7.1.0"
   },
   "dependencies": {
-    "commander": "^4.0.0",
-    "dayjs": "^1.8.17",
+    "commander": "^5.1.0",
+    "dayjs": "^1.8.25",
     "filenamify": "^4.1.0",
-    "got": "^9.6.0"
+    "got": "^11.0.2"
   },
   "husky": {
     "hooks": {
