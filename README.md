@@ -4,13 +4,21 @@
 
 ## How to Use
 
+### Binaries
+
+[Visit the releases page](https://github.com/lightpohl/gb-dl/releases) and download the latest binary for your system.
+
+`gb-dl --api-key <YOUR_API_KEY> --show-name <string> --video-name <string>`
+
+`gb-dl --api-key <YOUR_API_KEY> --show-name "Giant Bombcast" --video-name "Giant Bombcast 607"`
+
+`gb-dl --api-key <YOUR_API_KEY> --show-name "Giant Bombcast" --video-number 0`
+
+### npx
+
 **[Node Required](https://nodejs.org/en/)**
 
 `npx gb-dl --api-key <YOUR_API_KEY> --show-name <string> --video-name <string>`
-
-`npx gb-dl --api-key <YOUR_API_KEY> --show-name "Giant Bombcast" --video-name "Giant Bombcast 607"`
-
-`npx gb-dl --api-key <YOUR_API_KEY> --show-name "Giant Bombcast" --video-number 0`
 
 ## Options
 
