@@ -3,3 +3,4 @@ npm-debug.log
 coverage/
 package-lock.json
 gb-dl-cache.json
+binaries/
