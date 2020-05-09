@@ -391,6 +391,8 @@ let downloadVideo = async ({
     if (fs.existsSync(outputPath)) {
       fs.unlinkSync(outputPath);
     }
+
+    throw error;
   }
 };
 
