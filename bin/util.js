@@ -369,22 +369,28 @@ let downloadVideo = async ({
   console.log(`output path: ${outputPath}`);
 
   await rateLimit(debug);
-  await pipeline(
-    got
-      .stream(downloadUrl)
-      .on("downloadProgress", (progress) => {
-        printProgress(progress);
-      })
-      .on("end", () => {
-        endPrintProgress();
-      }),
-    fs.createWriteStream(outputPath)
-  );
+  try {
+    await pipeline(
+      got
+        .stream(downloadUrl)
+        .on("downloadProgress", (progress) => {
+          printProgress(progress);
+        })
+        .on("end", () => {
+          endPrintProgress();
 
-  console.log("download complete!");
+          if (archive) {
+            writeToArchive(downloadUrl);
+          }
 
-  if (archive) {
-    writeToArchive(downloadUrl);
+          console.log("download complete!");
+        }),
+      fs.createWriteStream(outputPath)
+    );
+  } catch (error) {
+    if (fs.existsSync(outputPath)) {
+      fs.unlinkSync(outputPath);
+    }
   }
 };
 
