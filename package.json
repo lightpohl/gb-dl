@@ -1,6 +1,6 @@
 {
   "name": "gb-dl",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "description": "A CLI for downloading Giant Bomb videos.",
   "bin": "./bin/bin.js",
   "scripts": {
