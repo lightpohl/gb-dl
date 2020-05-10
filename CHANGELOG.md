@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.6.4](https://github.com/lightpohl/gb-dl/compare/v2.6.3...v2.6.4) (2020-05-10)
+
+
+### Bug Fixes
+
+* add HEAD check before download stream starts ([a426689](https://github.com/lightpohl/gb-dl/commit/a426689ae65463c404fd65179d52343de59555cb))
+
 ### [2.6.3](https://github.com/lightpohl/gb-dl/compare/v2.6.2...v2.6.3) (2020-05-09)
 
 
