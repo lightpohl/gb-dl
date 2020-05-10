@@ -369,6 +369,13 @@ let downloadVideo = async ({
   console.log(`output path: ${outputPath}`);
 
   await rateLimit(debug);
+  await got(downloadUrl, {
+    timeout: 5000,
+    method: "HEAD",
+    responseType: "json",
+  });
+
+  await rateLimit(debug);
   try {
     await pipeline(
       got
