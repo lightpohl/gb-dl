@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.6.5](https://github.com/lightpohl/gb-dl/compare/v2.6.4...v2.6.5) (2020-05-11)
+
+
+### Bug Fixes
+
+* do not archive if video save fails ([d5bd372](https://github.com/lightpohl/gb-dl/commit/d5bd372277b066c8e9765cf31b4ea85cd46ec48e))
+
 ### [2.6.4](https://github.com/lightpohl/gb-dl/compare/v2.6.3...v2.6.4) (2020-05-10)
 
 
