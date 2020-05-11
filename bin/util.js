@@ -307,9 +307,8 @@ let getVideosResponse = async ({
 };
 
 let BYTES_IN_MB = 1000000;
-let currentProgressLine = "";
 let printProgress = ({ percent, total }) => {
-  let percentRounded = (percent * 100).toFixed(0);
+  let percentRounded = (percent * 100).toFixed(2);
   let line = `downloading... ${percentRounded}%`;
 
   if (total) {
@@ -318,12 +317,9 @@ let printProgress = ({ percent, total }) => {
     line += ` of ${roundedTotalMbs} MB`;
   }
 
-  if (line !== currentProgressLine) {
-    process.stdout.clearLine();
-    process.stdout.cursorTo(0);
-    process.stdout.write(line);
-    currentProgressLine = line;
-  }
+  process.stdout.clearLine();
+  process.stdout.cursorTo(0);
+  process.stdout.write(line);
 };
 
 let endPrintProgress = () => {
@@ -364,12 +360,18 @@ let downloadVideo = async ({
     `${safeFilename}${fileExt}`
   );
 
+  let removeFile = () => {
+    if (fs.existsSync(outputPath)) {
+      fs.unlinkSync(outputPath);
+    }
+  };
+
   console.log(`starting download for ${video.name}`);
   console.log(`video url: ${downloadUrl}`);
   console.log(`output path: ${outputPath}`);
 
   await rateLimit(debug);
-  await got(downloadUrl, {
+  let headResponse = await got(downloadUrl, {
     timeout: 5000,
     method: "HEAD",
     responseType: "json",
@@ -385,21 +387,31 @@ let downloadVideo = async ({
         })
         .on("end", () => {
           endPrintProgress();
-
-          if (archive) {
-            writeToArchive(downloadUrl);
-          }
-
           console.log("download complete!");
         }),
       fs.createWriteStream(outputPath)
     );
   } catch (error) {
-    if (fs.existsSync(outputPath)) {
-      fs.unlinkSync(outputPath);
-    }
-
+    removeFile();
     throw error;
+  }
+
+  let fileSize = fs.statSync(outputPath).size;
+  let expectedSize = parseInt(headResponse.headers["content-length"]);
+
+  if (fileSize === 0) {
+    removeFile();
+    throw new Error("Unable to save video. Suggestion: verify permissions");
+  }
+
+  if (expectedSize && !isNaN(expectedSize) && expectedSize !== fileSize) {
+    console.warn(
+      "Video size differs from expected size. Suggestion: verify video plays as expected"
+    );
+  }
+
+  if (archive) {
+    writeToArchive(downloadUrl);
   }
 };
 
