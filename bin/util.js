@@ -346,7 +346,8 @@ let downloadVideo = async ({
 
   let downloadUrl = `${qualityUrl}?api_key=${apiKey}`;
 
-  if (archive && isInArchive(downloadUrl)) {
+  // Remove second check for `downloadUrl` in next breaking release
+  if (archive && (isInArchive(qualityUrl) || isInArchive(downloadUrl))) {
     console.log(`${video.name} at ${quality} quality exists in archive`);
     console.log("skipping download...");
     return;
@@ -367,7 +368,7 @@ let downloadVideo = async ({
   };
 
   console.log(`starting download for ${video.name}`);
-  console.log(`video url: ${downloadUrl}`);
+  console.log(`video url: ${qualityUrl}`);
   console.log(`output path: ${outputPath}`);
 
   await rateLimit(debug);
@@ -411,7 +412,7 @@ let downloadVideo = async ({
   }
 
   if (archive) {
-    writeToArchive(downloadUrl);
+    writeToArchive(qualityUrl);
   }
 };
 
