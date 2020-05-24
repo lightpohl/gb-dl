@@ -307,14 +307,22 @@ let getVideosResponse = async ({
 };
 
 let BYTES_IN_MB = 1000000;
-let printProgress = ({ percent, total }) => {
-  let percentRounded = (percent * 100).toFixed(2);
-  let line = `downloading... ${percentRounded}%`;
+let printProgress = ({ percent, total, transferred }) => {
+  let line = `downloading...`;
 
-  if (total) {
-    let totalMBs = total / BYTES_IN_MB;
-    let roundedTotalMbs = totalMBs.toFixed(2);
-    line += ` of ${roundedTotalMbs} MB`;
+  if (transferred > 0) {
+    /*
+     * Got has a bug where "percent" will be 1 for a moment when the download starts.
+     * Ignore percent until transfer has started.
+     */
+    let percentRounded = (percent * 100).toFixed(2);
+    line += ` ${percentRounded}%`;
+
+    if (total) {
+      let totalMBs = total / BYTES_IN_MB;
+      let roundedTotalMbs = totalMBs.toFixed(2);
+      line += ` of ${roundedTotalMbs} MB`;
+    }
   }
 
   process.stdout.clearLine();
