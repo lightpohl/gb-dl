@@ -39,7 +39,7 @@
     "lint-staged": "^10.2.0",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
-    "standard-version": "^8.0.1"
+    "standard-version": "^9.3.0"
   },
   "dependencies": {
     "commander": "^5.1.0",
