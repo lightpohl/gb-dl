@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/lightpohl/gb-dl/compare/v2.6.8...v2.7.0) (2021-05-05)
+
+
+### Features
+
+* add --add-guid-prefix flag ([eeb4d5d](https://github.com/lightpohl/gb-dl/commit/eeb4d5d56b5cfb2f194732b750899091c896fd53)), closes [#3](https://github.com/lightpohl/gb-dl/issues/3)
+
+
+### Bug Fixes
+
+* add workaround for missing 8k bitrate videos ([9a837ff](https://github.com/lightpohl/gb-dl/commit/9a837ff8cb3de0f3eb5add87798046a469c73b56)), closes [#4](https://github.com/lightpohl/gb-dl/issues/4)
+
 ### [2.6.8](https://github.com/lightpohl/gb-dl/compare/v2.6.7...v2.6.8) (2021-05-05)
 
 
