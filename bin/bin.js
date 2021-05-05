@@ -48,6 +48,10 @@ program
     "--date-before <string>",
     "MM/DD/YYYY video must be published before (inclusive)"
   )
+  .option(
+    "--add-guid-prefix",
+    "Prefixes the downloaded video its associated GUID"
+  )
   .option("--info", "show selected video info instead of downloading")
   .option("--archive", "check if video exists in archive before downloading")
   .option("--clean", "ignore previous cache results for query")
@@ -100,6 +104,7 @@ let main = async () => {
         outDir: program.outDir,
         quality: program.quality,
         debug: program.debug,
+        addGuidPrefix: program.addGuidPrefix,
       });
     }
 
@@ -178,6 +183,7 @@ let main = async () => {
     quality: program.quality,
     archive: program.archive,
     debug: program.debug,
+    addGuidPrefix: program.addGuidPrefix,
   });
 };
 

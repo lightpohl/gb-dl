@@ -42,6 +42,7 @@ let videosFieldList = [
   "name",
   "deck",
   "publish_date",
+  "guid",
   "id",
   "api_detail_url",
   "site_detail_url",
@@ -353,6 +354,7 @@ let downloadVideo = async ({
   outDir,
   debug,
   archive,
+  addGuidPrefix,
 }) => {
   let qualityUrl =
     quality === "highest"
@@ -375,11 +377,11 @@ let downloadVideo = async ({
 
   let safeFilename = filenamify(video.name, { replacement: "_" });
   let fileExt = path.extname(qualityUrl);
-  let outputPath = path.resolve(
-    process.cwd(),
-    outDir,
-    `${safeFilename}${fileExt}`
-  );
+  let fullFilename =
+    addGuidPrefix && video.guid
+      ? `${video.guid} - ${safeFilename}${fileExt}`
+      : `${safeFilename}${fileExt}`;
+  let outputPath = path.resolve(process.cwd(), outDir, fullFilename);
 
   let removeFile = () => {
     if (fs.existsSync(outputPath)) {
