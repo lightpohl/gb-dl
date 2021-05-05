@@ -134,6 +134,18 @@ let getVideoSearch = async ({
     return null;
   }
 
+  /*
+    The Giant Bomb API has a bug where video quality URLs will be missing in some search responses.
+    Grabbing the details for the direct URL mitigates this issue.
+    @see https://github.com/lightpohl/gb-dl/issues/2
+  */
+  if (result.api_detail_url) {
+    await rateLimit(debug);
+    result = await got(
+      `${result.api_detail_url}?format=json${apiKeyParam}`
+    ).json().results;
+  }
+
   return writeCache({ key: requestUrl, data: result });
 };
 
