@@ -30,25 +30,25 @@
 
 **Either `--video-name` or `--video-number` must be provided.**
 
-| Option            | Type   | Required | Description                                                                                         |
-| ----------------- | ------ | -------- | --------------------------------------------------------------------------------------------------- |
-| --api-key         | String | false\*  | Individual [Giant Bomb API key](https://www.giantbomb.com/api/).                                    |
-| --show-name       | String | false    | Used to find matching show title.                                                                   |
-| --video-name      | String | false\*  | Used to find matching video title.                                                                  |
-| --video-number    | Number | false\*  | Zero-based video index for provided show (most recent video is `0`). Defaults to `0`.               |
-| --only-premium    |        | false    | Filter search to only premium videos.                                                               |
-| --only-free       |        | false    | Filter search to only free videos.                                                                  |
-| --quality         | String | false    | Specify quality of video to download. Defaults to highest. Other options: hd, high, low and mobile. |
-| --date-after      | String | false    | Check if video was published after date before downloading (i.e. MM/DD/YYY, inclusive).             |
-| --date-before     | String | false    | Check if video was published before date before downloading (i.e. MM/DD/YYY, inclusive).            |
-| --out-dir         | String | false    | Specify output directory for video. Defaults to current working directory.                          |
-| --add-guid-prefix |        | false    | Prefixes the downloaded video its associated GUID (e.g. "2300-14149 - Quick Look\_ Forager.mp4")    |
-| --info            |        | false    | Output video information instead of download.                                                       |
-| --archive         |        | false    | Check archive before downloading.                                                                   |
-| --clean           |        | false    | Ignore cache when making query.                                                                     |
-| --debug           |        | false    | Show debug statements.                                                                              |
-| --version         |        | false    | Output the version number.                                                                          |
-| --help            |        | false    | Output usage information.                                                                           |
+| Option            | Type   | Required | Description                                                                                           |
+| ----------------- | ------ | -------- | ----------------------------------------------------------------------------------------------------- |
+| --api-key         | String | false\*  | Individual [Giant Bomb API key](https://www.giantbomb.com/api/).                                      |
+| --show-name       | String | false    | Used to find matching show title.                                                                     |
+| --video-name      | String | false\*  | Used to find matching video title.                                                                    |
+| --video-number    | Number | false\*  | Zero-based video index for provided show (most recent video is `0`). Defaults to `0`.                 |
+| --only-premium    |        | false    | Filter search to only premium videos.                                                                 |
+| --only-free       |        | false    | Filter search to only free videos.                                                                    |
+| --quality         | String | false    | Specify quality of video to download. Defaults to highest. Other options: hd, high, low and mobile.   |
+| --date-after      | String | false    | Check if video was published after date before downloading (i.e. MM/DD/YYY, inclusive).               |
+| --date-before     | String | false    | Check if video was published before date before downloading (i.e. MM/DD/YYY, inclusive).              |
+| --out-dir         | String | false    | Specify output directory for video. Defaults to current working directory.                            |
+| --add-guid-prefix |        | false    | Prefixes the downloaded video with its associated GUID (e.g. "2300-14149 - Quick Look\_ Forager.mp4") |
+| --info            |        | false    | Output video information instead of download.                                                         |
+| --archive         |        | false    | Check archive before downloading.                                                                     |
+| --clean           |        | false    | Ignore cache when making query.                                                                       |
+| --debug           |        | false    | Show debug statements.                                                                                |
+| --version         |        | false    | Output the version number.                                                                            |
+| --help            |        | false    | Output usage information.                                                                             |
 
 ## [Giant Bomb API](https://www.giantbomb.com/api/)
 
