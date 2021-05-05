@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.6.8](https://github.com/lightpohl/gb-dl/compare/v2.6.7...v2.6.8) (2021-05-05)
+
+
+### Bug Fixes
+
+* request video details directly after finding via search API ([35322b1](https://github.com/lightpohl/gb-dl/commit/35322b1fc224273535510e29fa34fdc5076dd2ae)), closes [#2](https://github.com/lightpohl/gb-dl/issues/2)
+
 ### [2.6.7](https://github.com/lightpohl/gb-dl/compare/v2.6.6...v2.6.7) (2020-05-24)
 
 
