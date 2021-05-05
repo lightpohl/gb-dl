@@ -389,6 +389,30 @@ let downloadVideo = async ({
     }
   };
 
+  /*
+    The Giant Bomb API isn't returning the highest bitrate version
+    for newer videos. We manually check for this highest quality as a workaround.
+    @see https://github.com/lightpohl/gb-dl/issues/4
+  */
+  if (quality === "highest" && qualityUrl.includes("_4000.")) {
+    let maxBitrateUrl = `${qualityUrl.replace("_4000.", "_8000.")}`;
+    let maxBitrateDownloadUrl = `${maxBitrateUrl}?api_key=${apiKey}`;
+
+    try {
+      await rateLimit(debug);
+      await got(maxBitrateDownloadUrl, {
+        timeout: 5000,
+        method: "HEAD",
+        responseType: "json",
+      });
+
+      qualityUrl = maxBitrateDownloadUrl;
+      downloadUrl = maxBitrateDownloadUrl;
+    } catch (error) {
+      // do nothing
+    }
+  }
+
   console.log(`starting download for ${video.name}`);
   console.log(`video url: ${qualityUrl}`);
   console.log(`output path: ${outputPath}`);
