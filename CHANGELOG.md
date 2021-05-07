@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.1](https://github.com/lightpohl/gb-dl/compare/v2.7.0...v2.7.1) (2021-05-07)
+
+
+### Bug Fixes
+
+* 8k bitrate urls should be properly saved to the archive ([29ad4fe](https://github.com/lightpohl/gb-dl/commit/29ad4fe68e88c774c2cf5e1680e2d45c16f0bf9f))
+
 ## [2.7.0](https://github.com/lightpohl/gb-dl/compare/v2.6.8...v2.7.0) (2021-05-05)
 
 
