@@ -368,27 +368,6 @@ let downloadVideo = async ({
 
   let downloadUrl = `${qualityUrl}?api_key=${apiKey}`;
 
-  // Remove second check for `downloadUrl` in next breaking release
-  if (archive && (isInArchive(qualityUrl) || isInArchive(downloadUrl))) {
-    console.log(`${video.name} at ${quality} quality exists in archive`);
-    console.log("skipping download...");
-    return;
-  }
-
-  let safeFilename = filenamify(video.name, { replacement: "_" });
-  let fileExt = path.extname(qualityUrl);
-  let fullFilename =
-    addGuidPrefix && video.guid
-      ? `${video.guid} - ${safeFilename}${fileExt}`
-      : `${safeFilename}${fileExt}`;
-  let outputPath = path.resolve(process.cwd(), outDir, fullFilename);
-
-  let removeFile = () => {
-    if (fs.existsSync(outputPath)) {
-      fs.unlinkSync(outputPath);
-    }
-  };
-
   /*
     The Giant Bomb API isn't returning the highest bitrate version
     for newer videos. We manually check for this highest quality as a workaround.
@@ -412,6 +391,27 @@ let downloadVideo = async ({
       // do nothing
     }
   }
+
+  // Remove second check for `downloadUrl` in next breaking release
+  if (archive && (isInArchive(qualityUrl) || isInArchive(downloadUrl))) {
+    console.log(`${video.name} at ${quality} quality exists in archive`);
+    console.log("skipping download...");
+    return;
+  }
+
+  let safeFilename = filenamify(video.name, { replacement: "_" });
+  let fileExt = path.extname(qualityUrl);
+  let fullFilename =
+    addGuidPrefix && video.guid
+      ? `${video.guid} - ${safeFilename}${fileExt}`
+      : `${safeFilename}${fileExt}`;
+  let outputPath = path.resolve(process.cwd(), outDir, fullFilename);
+
+  let removeFile = () => {
+    if (fs.existsSync(outputPath)) {
+      fs.unlinkSync(outputPath);
+    }
+  };
 
   console.log(`starting download for ${video.name}`);
   console.log(`video url: ${qualityUrl}`);
