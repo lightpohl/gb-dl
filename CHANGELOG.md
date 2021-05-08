@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.8.0](https://github.com/lightpohl/gb-dl/compare/v2.7.1...v2.8.0) (2021-05-08)
+
+
+### Features
+
+* add "--add-date-prefix" option ([05987ed](https://github.com/lightpohl/gb-dl/commit/05987edb9fe0973641b126163ebac361ab0aaaed))
+
 ### [2.7.1](https://github.com/lightpohl/gb-dl/compare/v2.7.0...v2.7.1) (2021-05-07)
 
 
