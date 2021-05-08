@@ -50,7 +50,11 @@ program
   )
   .option(
     "--add-guid-prefix",
-    "Prefixes the downloaded video its associated GUID"
+    "Prefixes the downloaded video with its associated GUID"
+  )
+  .option(
+    "--add-date-prefix",
+    "Prefixes the downloaded video with its publish date (YYYY-MM-DD)"
   )
   .option("--info", "show selected video info instead of downloading")
   .option("--archive", "check if video exists in archive before downloading")
@@ -105,6 +109,7 @@ let main = async () => {
         quality: program.quality,
         debug: program.debug,
         addGuidPrefix: program.addGuidPrefix,
+        addDatePrefix: program.addDatePrefix,
       });
     }
 
@@ -184,6 +189,7 @@ let main = async () => {
     archive: program.archive,
     debug: program.debug,
     addGuidPrefix: program.addGuidPrefix,
+    addDatePrefix: program.addDatePrefix,
   });
 };
 

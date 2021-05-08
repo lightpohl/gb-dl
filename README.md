@@ -43,6 +43,7 @@
 | --date-before     | String | false    | Check if video was published before date before downloading (i.e. MM/DD/YYY, inclusive).              |
 | --out-dir         | String | false    | Specify output directory for video. Defaults to current working directory.                            |
 | --add-guid-prefix |        | false    | Prefixes the downloaded video with its associated GUID (e.g. "2300-14149 - Quick Look\_ Forager.mp4") |
+| --add-date-prefix |        | false    | Prefixes the downloaded video with its publish date (e.g. "2021-05-08 - Quick Look\_ Forager.mp4")    |
 | --info            |        | false    | Output video information instead of download.                                                         |
 | --archive         |        | false    | Check archive before downloading.                                                                     |
 | --clean           |        | false    | Ignore cache when making query.                                                                       |

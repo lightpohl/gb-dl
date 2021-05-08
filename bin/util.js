@@ -4,6 +4,7 @@ let got = require("got");
 let fs = require("fs");
 let path = require("path");
 let filenamify = require("filenamify");
+let dayjs = require("dayjs");
 
 let pipeline = promisify(stream.pipeline);
 
@@ -355,7 +356,9 @@ let downloadVideo = async ({
   debug,
   archive,
   addGuidPrefix,
+  addDatePrefix,
 }) => {
+  let publishDate = dayjs(new Date(video.publish_date));
   let qualityUrl =
     quality === "highest"
       ? getHighestQualityUrl(video)
@@ -385,7 +388,7 @@ let downloadVideo = async ({
         responseType: "json",
       });
 
-      qualityUrl = maxBitrateDownloadUrl;
+      qualityUrl = maxBitrateUrl;
       downloadUrl = maxBitrateDownloadUrl;
     } catch (error) {
       // do nothing
@@ -405,8 +408,11 @@ let downloadVideo = async ({
     addGuidPrefix && video.guid
       ? `${video.guid} - ${safeFilename}${fileExt}`
       : `${safeFilename}${fileExt}`;
-  let outputPath = path.resolve(process.cwd(), outDir, fullFilename);
+  fullFilename = addDatePrefix
+    ? `${publishDate.format("YYYY-MM-DD")} - ${fullFilename}`
+    : fullFilename;
 
+  let outputPath = path.resolve(process.cwd(), outDir, fullFilename);
   let removeFile = () => {
     if (fs.existsSync(outputPath)) {
       fs.unlinkSync(outputPath);
