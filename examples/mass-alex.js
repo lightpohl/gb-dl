@@ -31,7 +31,7 @@ let endingEpisode = 42; // Mass Alex: Mass Effect - Part 01
 for (let i = startingEpisodeNumber; i <= endingEpisode; i++) {
   try {
     execSync(
-      `npx gb-dl --api-key ${apiKey} --show-name ${showName} --video-number ${i}`,
+      `npx gb-dl --api-key ${apiKey} --show-name "${showName}" --video-number ${i}`,
       { stdio: "inherit" } // this will allow us to see the console output as it downloads
     );
   } catch (error) {
