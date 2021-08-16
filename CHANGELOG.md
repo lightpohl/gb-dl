@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.9.0](https://github.com/lightpohl/gb-dl/compare/v2.8.0...v2.9.0) (2021-08-16)
+
+
+### Features
+
+* add '--video-number-reverse option' ([c4bf062](https://github.com/lightpohl/gb-dl/commit/c4bf0625c91cc35a5b81ca9f38821a8a755a9fce))
+
 ## [2.8.0](https://github.com/lightpohl/gb-dl/compare/v2.7.1...v2.8.0) (2021-05-08)
 
 
