@@ -4,3 +4,4 @@ coverage/
 package-lock.json
 gb-dl-cache.json
 binaries/
+.DS_Store

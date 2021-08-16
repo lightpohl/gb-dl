@@ -143,9 +143,13 @@ let getVideoSearch = async ({
   */
   if (result.api_detail_url) {
     await rateLimit(debug);
-    result = await got(
+    const detailsResponse = await got(
       `${result.api_detail_url}?format=json${apiKeyParam}`
-    ).json().results;
+    ).json();
+
+    if (detailsResponse.result) {
+      result = detailsResponse.result;
+    }
   }
 
   return writeCache({ key: requestUrl, data: result });
@@ -180,7 +184,15 @@ let getShow = async ({ apiKey, name, clean, debug }) => {
   return result;
 };
 
-let getVideo = async ({ apiKey, name, number, filters, clean, debug }) => {
+let getVideo = async ({
+  apiKey,
+  name,
+  number,
+  reverse,
+  filters,
+  clean,
+  debug,
+}) => {
   let result = null;
 
   if (name) {
@@ -218,11 +230,12 @@ let getVideo = async ({ apiKey, name, number, filters, clean, debug }) => {
   } else {
     let response = await getVideosResponse({
       apiKey,
-      limit: 1,
-      offset: number,
       filters,
       clean,
       debug,
+      reverse,
+      offset: number,
+      limit: 1,
     });
 
     let { results } = response;
@@ -281,6 +294,7 @@ let getVideosResponse = async ({
   offset,
   limit,
   filters,
+  reverse,
   clean,
   debug,
 }) => {
@@ -288,7 +302,8 @@ let getVideosResponse = async ({
   let limitParam = `&limit=${limit}`;
   let offsetParam = `&offset=${offset}`;
   let filterParam = `&filter=${filters.join(",")}`;
-  let requestUrl = `${baseVideosUrl}${apiKeyParam}${limitParam}${offsetParam}${filterParam}`;
+  let sortParam = reverse ? "&sort=id:asc" : "";
+  let requestUrl = `${baseVideosUrl}${apiKeyParam}${limitParam}${offsetParam}${filterParam}${sortParam}`;
 
   let cacheData = clean ? null : readCache(requestUrl);
   if (cacheData) {

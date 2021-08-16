@@ -32,6 +32,10 @@ program
     createParseNumber({ min: 0, name: "--video-number" }),
     0
   )
+  .option(
+    "--video-number-reverse",
+    "swaps direction of provided video number (oldest = 0)"
+  )
   .option("--only-premium", "show only premium versions")
   .option("--only-free", "show only free versions")
   .option(
@@ -137,6 +141,7 @@ let main = async () => {
     apiKey,
     name: program.videoName,
     number: program.videoNumber,
+    reverse: program.videoNumberReverse,
     clean: program.clean,
     debug: program.debug,
   });

@@ -1,23 +1,18 @@
 /*
-  mass-alex.js
+  persona-4-endurance-run.js
 
-  Description: The script below will download all the current episodes in the Mass Alex show.
+  Description: The script below will download all the episodes for the Persona 4 Endurance Run.
   Required: Node
-  How to Run: `node mass-alex.js`
+  How to Run: `node persona-4-endurance-run.js`
 */
 let execSync = require("child_process").execSync;
 
 // Replace `YOUR_API_KEY` with the key from https://www.giantbomb.com/api
 let apiKey = "YOUR_API_KEY";
 
-/*
-  Finding the `endingEpisode` is a little tricky if there are multiple seasons
-  of a show, but you can add the `--info` command with different `--video-number` numbers
-  to find it before running the script.
-*/
-let showName = "Mass Alex";
-let startingEpisodeNumber = 0; // Mass Alex: Mass Effect - Part 01
-let endingEpisode = 42; // Mass Alex: Mass Effect 2 - Part 24
+let showName = "Endurance Run";
+let startingEpisodeNumber = 0;
+let endingEpisode = 160;
 
 for (let i = startingEpisodeNumber; i <= endingEpisode; i++) {
   try {
