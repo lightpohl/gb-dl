@@ -337,6 +337,10 @@ let getVideosResponse = async ({
 
 let BYTES_IN_MB = 1000000;
 let printProgress = ({ percent, total, transferred }) => {
+  if (!process.stdout.isTTY) {
+    return;
+  }
+
   let line = `downloading...`;
 
   if (transferred > 0) {
