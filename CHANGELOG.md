@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.9.1](https://github.com/lightpohl/gb-dl/compare/v2.9.0...v2.9.1) (2021-09-12)
+
+
+### Bug Fixes
+
+* skip download progress logging in non-TTY envs ([03dbc97](https://github.com/lightpohl/gb-dl/commit/03dbc97f766d5d915e78c9a158a548f3c9cffa1b))
+
 ## [2.9.0](https://github.com/lightpohl/gb-dl/compare/v2.8.0...v2.9.0) (2021-08-16)
 
 
