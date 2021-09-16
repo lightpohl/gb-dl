@@ -424,7 +424,7 @@ let downloadVideo = async ({
     return;
   }
 
-  if (blocklist && isInBlocklist(showTitle)) {
+  if (blocklist && showTitle && isInBlocklist(showTitle)) {
     console.log(`show "${showTitle}" exists in blocklist`);
     console.log("ignoring...");
     return;
