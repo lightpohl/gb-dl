@@ -391,7 +391,7 @@ let downloadVideo = async ({
   }
 
   let downloadUrl = `${qualityUrl}?api_key=${apiKey}`;
-  let showTitle = video.video_show.title;
+  let showTitle = video.video_show && video.video_show.title ? video.video_show.title : null;
 
   /*
     The Giant Bomb API isn't returning the highest bitrate version
