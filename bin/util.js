@@ -51,6 +51,7 @@ let videosFieldList = [
   "high_url",
   "low_url",
   "premium",
+  "video_show"
 ];
 
 let searchFieldList = [...videosFieldList, "video_show"];
@@ -374,6 +375,7 @@ let downloadVideo = async ({
   outDir,
   debug,
   archive,
+  blocklist,
   addGuidPrefix,
   addDatePrefix,
 }) => {
@@ -389,6 +391,7 @@ let downloadVideo = async ({
   }
 
   let downloadUrl = `${qualityUrl}?api_key=${apiKey}`;
+  let showTitle = video.video_show && video.video_show.title ? video.video_show.title : null;
 
   /*
     The Giant Bomb API isn't returning the highest bitrate version
@@ -421,6 +424,12 @@ let downloadVideo = async ({
     return;
   }
 
+  if (blocklist && showTitle && isInBlocklist(showTitle)) {
+    console.log(`show "${showTitle}" exists in blocklist`);
+    console.log("ignoring...");
+    return;
+  }  
+  
   let safeFilename = filenamify(video.name, { replacement: "_" });
   let fileExt = path.extname(qualityUrl);
   let fullFilename =
@@ -592,6 +601,17 @@ let isInArchive = (downloadUrl) => {
   let archive = JSON.parse(fs.readFileSync(archivePath));
 
   return archive.includes(downloadUrl);
+};
+
+let blocklistPath = path.resolve(process.cwd(), "gb-dl-blocklist.json");
+let isInBlocklist = (showTitle) => {
+  if (!fs.existsSync(blocklistPath)) {
+    return false;
+  }
+
+  let blocklist = JSON.parse(fs.readFileSync(blocklistPath));
+
+  return blocklist.includes(showTitle);
 };
 
 module.exports = {

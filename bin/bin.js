@@ -64,6 +64,7 @@ program
   .option("--archive", "check if video exists in archive before downloading")
   .option("--clean", "ignore previous cache results for query")
   .option("--debug", "show debug statements")
+  .option("--blocklist", "check if show is on blocklist before downloading")
   .parse(process.argv);
 
 if (!program.apiKey && !GIANTBOMB_TOKEN) {
@@ -192,6 +193,7 @@ let main = async () => {
     outDir: program.outDir,
     quality: program.quality,
     archive: program.archive,
+    blocklist: program.blocklist,
     debug: program.debug,
     addGuidPrefix: program.addGuidPrefix,
     addDatePrefix: program.addDatePrefix,

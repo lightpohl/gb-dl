@@ -45,6 +45,7 @@
 | --add-date-prefix      |        | false    | Prefixes the downloaded video with its publish date (e.g. "2021-05-08 - Quick Look\_ Forager.mp4")    |
 | --info                 |        | false    | Output video information instead of download.                                                         |
 | --archive              |        | false    | Check archive before downloading.                                                                     |
+| --blocklist            |        | false    | Check blocklist before downloading.                                                                   |
 | --clean                |        | false    | Ignore cache when making query.                                                                       |
 | --debug                |        | false    | Show debug statements.                                                                                |
 | --version              |        | false    | Output the version number.                                                                            |
@@ -71,5 +72,11 @@
 
 - If passed the `--archive` flag, `gb-dl` will generate/use a `gb-dl-archive.json` in the current working directory.
 - Before downloading a video, it'll check if the video was downloaded previously and abort the download if found.
+
+## Blocklist
+
+- If the `--blocklist` flag is passed, `gb-dl` will lookup a `gb-dl-blocklist.json` in the current working directory. 
+- Before downloading a video it'll check if the `video_show` title is included in the blocklist and ignore the download if found.
+- See [Examples](./examples) for an example blocklist.
 
 ## [More Examples](./examples)
