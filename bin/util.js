@@ -51,7 +51,7 @@ let videosFieldList = [
   "high_url",
   "low_url",
   "premium",
-  "video_show"
+  "video_show",
 ];
 
 let searchFieldList = [...videosFieldList, "video_show"];
@@ -365,6 +365,10 @@ let printProgress = ({ percent, total, transferred }) => {
 };
 
 let endPrintProgress = () => {
+  if (!process.stdout.isTTY) {
+    return;
+  }
+
   process.stdout.write("\n");
 };
 
@@ -391,7 +395,8 @@ let downloadVideo = async ({
   }
 
   let downloadUrl = `${qualityUrl}?api_key=${apiKey}`;
-  let showTitle = video.video_show && video.video_show.title ? video.video_show.title : null;
+  let showTitle =
+    video.video_show && video.video_show.title ? video.video_show.title : null;
 
   /*
     The Giant Bomb API isn't returning the highest bitrate version
@@ -428,8 +433,8 @@ let downloadVideo = async ({
     console.log(`show "${showTitle}" exists in blocklist`);
     console.log("ignoring...");
     return;
-  }  
-  
+  }
+
   let safeFilename = filenamify(video.name, { replacement: "_" });
   let fileExt = path.extname(qualityUrl);
   let fullFilename =
