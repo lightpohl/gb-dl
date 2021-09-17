@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.10.0](https://github.com/lightpohl/gb-dl/compare/v2.9.1...v2.10.0) (2021-09-17)
+
+
+### Features
+
+* add --blocklist option ([#9](https://github.com/lightpohl/gb-dl/issues/9)) ([c90a7b7](https://github.com/lightpohl/gb-dl/commit/c90a7b7105907340922ccada307e9386bc95ead3))
+
+
+### Bug Fixes
+
+* avoid extra newline in non-TTY envs ([2cbc72e](https://github.com/lightpohl/gb-dl/commit/2cbc72e4c15ce2fba5577f98463ebdadcb39e8f4))
+
 ### [2.9.1](https://github.com/lightpohl/gb-dl/compare/v2.9.0...v2.9.1) (2021-09-12)
 
 
