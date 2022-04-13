@@ -16,6 +16,8 @@
 
 `gb-dl --api-key <YOUR_API_KEY> --show-name "Giant Bombcast" --video-number 0`
 
+`gb-dl --api-key <YOUR_API_KEY> --video-guid "2970-14405"`
+
 ### npx
 
 **[Node Required](https://nodejs.org/en/)**
