@@ -515,6 +515,7 @@ const downloadVideo = async ({
           printProgress(progress);
         })
         .on("end", () => {
+          printProgress.cancel();
           endPrintProgress();
           console.log("download complete!");
         }),
