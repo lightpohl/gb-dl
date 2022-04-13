@@ -460,8 +460,7 @@ const downloadVideo = async ({
     }
   }
 
-  // Remove second check for `downloadUrl` in next breaking release
-  if (archive && (isInArchive(qualityUrl) || isInArchive(downloadUrl))) {
+  if (archive && isInArchive(qualityUrl)) {
     console.log(`${video.name} at ${quality} quality exists in archive`);
     console.log("skipping download...");
     return;
@@ -484,18 +483,24 @@ const downloadVideo = async ({
     : fullFilename;
 
   const outputPath = path.resolve(process.cwd(), outDir, fullFilename);
+  const tempOutputPath = `${outputPath}.tmp`;
   const removeFile = () => {
-    if (fs.existsSync(outputPath)) {
-      fs.unlinkSync(outputPath);
+    if (fs.existsSync(tempOutputPath)) {
+      fs.unlinkSync(tempOutputPath);
     }
   };
+
+  if (fs.existsSync(outputPath)) {
+    console.log("video exists locally. skipping download...");
+    return;
+  }
 
   console.log(`starting download for ${video.name}`);
   console.log(`video url: ${qualityUrl}`);
   console.log(`output path: ${outputPath}`);
 
   await rateLimit(debug);
-  const headResponse = await got(downloadUrl, {
+  await got(downloadUrl, {
     timeout: 5000,
     method: "HEAD",
     responseType: "json",
@@ -513,26 +518,21 @@ const downloadVideo = async ({
           endPrintProgress();
           console.log("download complete!");
         }),
-      fs.createWriteStream(outputPath)
+      fs.createWriteStream(tempOutputPath)
     );
   } catch (error) {
     removeFile();
     throw error;
   }
 
-  const fileSize = fs.statSync(outputPath).size;
-  const expectedSize = parseInt(headResponse.headers["content-length"]);
+  const fileSize = fs.statSync(tempOutputPath).size;
 
   if (fileSize === 0) {
     removeFile();
     throw new Error("Unable to save video. Suggestion: verify permissions");
   }
 
-  if (expectedSize && !isNaN(expectedSize) && expectedSize !== fileSize) {
-    console.warn(
-      "Video size differs from expected size. Suggestion: verify video plays as expected"
-    );
-  }
+  fs.renameSync(tempOutputPath, outputPath);
 
   if (archive) {
     writeToArchive(qualityUrl);
