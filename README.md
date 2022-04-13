@@ -26,13 +26,14 @@
 
 **API key may be provided via `--api-key` option or `GIANTBOMB_TOKEN` env variable.**
 
-**Either `--video-name` or `--video-number` must be provided.**
+**Either `--video-name`, `--video-guid`, or `--video-number` must be provided.**
 
 | Option                 | Type   | Required | Description                                                                                           |
 | ---------------------- | ------ | -------- | ----------------------------------------------------------------------------------------------------- |
 | --api-key              | String | false\*  | Individual [Giant Bomb API key](https://www.giantbomb.com/api/).                                      |
 | --show-name            | String | false    | Used to find matching show title.                                                                     |
 | --video-name           | String | false\*  | Used to find matching video title.                                                                    |
+| --video-guid           | String | false\*  | Used to grab a video by its GUID directly.                                                            |
 | --video-number         | Number | false\*  | Zero-based video index for provided show (most recent video is `0`). Defaults to `0`.                 |
 | --video-number-reverse |        | false    | Swaps direction of provided "--video-number" (oldest video is now `0`).                               |
 | --only-premium         |        | false    | Filter search to only premium videos.                                                                 |
@@ -75,7 +76,7 @@
 
 ## Blocklist
 
-- If the `--blocklist` flag is passed, `gb-dl` will lookup a `gb-dl-blocklist.json` in the current working directory. 
+- If the `--blocklist` flag is passed, `gb-dl` will lookup a `gb-dl-blocklist.json` in the current working directory.
 - Before downloading a video it'll check if the `video_show` title is included in the blocklist and ignore the download if found.
 - See [Examples](./examples) for an example blocklist.
 

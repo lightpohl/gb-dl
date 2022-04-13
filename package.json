@@ -45,7 +45,8 @@
     "commander": "^5.1.0",
     "dayjs": "^1.8.25",
     "filenamify": "^4.1.0",
-    "got": "^11.0.2"
+    "got": "^11.0.2",
+    "throttle-debounce": "^4.0.0"
   },
   "husky": {
     "hooks": {

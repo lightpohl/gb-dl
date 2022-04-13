@@ -11,6 +11,7 @@ let {
   getVideo,
   downloadVideo,
   trimCache,
+  getVideoByGuid,
 } = require("./util");
 let { createParseNumber } = require("./validate");
 
@@ -26,6 +27,7 @@ program
   )
   .option("--show-name <string>", "show to filter search by")
   .option("--video-name <string>", "video name to find")
+  .option("--video-guid <string>", "video GUID")
   .option(
     "--video-number <number>",
     "video number to download (most recent = 0)",
@@ -70,9 +72,15 @@ program
 if (!program.apiKey && !GIANTBOMB_TOKEN) {
   console.error("--api-key not provided");
   process.exit(1);
-} else if (!program.videoName && typeof program.videoNumber === "undefined") {
+} else if (
+  !program.videoName &&
+  !program.videoGuid &&
+  typeof program.videoNumber === "undefined"
+) {
   console.log(program.videoName, program.videoNumber);
-  console.error("--video-name or --video-number must be provided");
+  console.error(
+    "--video-name, --video-guid, or --video-number must be provided"
+  );
   process.exit(1);
 } else if (!fs.existsSync(program.outDir)) {
   console.error(`--out-dir ${program.outDir} does not exist`);
@@ -88,11 +96,28 @@ if (program.onlyPremium) {
 trimCache(program.debug);
 
 let main = async () => {
-  let searchResult = null;
+  let result = null;
   let apiKey = program.apiKey || GIANTBOMB_TOKEN;
 
-  if (program.videoName) {
-    searchResult = await getVideoSearch({
+  if (program.videoGuid) {
+    let videoGuid = program.videoGuid;
+
+    try {
+      const { pathname } = new URL(program.videoGuid);
+      let guidRegex = new RegExp("[0-9]+(-[0-9]+)", "g");
+      videoGuid = guidRegex.exec(pathname)[0];
+    } catch (error) {
+      // do nothing
+    }
+
+    result = await getVideoByGuid({
+      apiKey,
+      videoGuid,
+      clean: program.clean,
+      debug: program.debug,
+    });
+  } else if (program.videoName) {
+    result = await getVideoSearch({
       apiKey,
       videoName: program.videoName,
       showName: program.showName,
@@ -103,13 +128,18 @@ let main = async () => {
     });
   }
 
-  if (searchResult) {
+  if (program.videoGuid && !result) {
+    console.error("no video found for GUID");
+    process.exit(1);
+  }
+
+  if (result) {
     if (program.info) {
-      console.log(searchResult);
+      console.log(result);
     } else {
       await downloadVideo({
         apiKey,
-        video: searchResult,
+        video: result,
         outDir: program.outDir,
         quality: program.quality,
         debug: program.debug,

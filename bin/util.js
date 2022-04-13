@@ -5,6 +5,7 @@ let fs = require("fs");
 let path = require("path");
 let filenamify = require("filenamify");
 let dayjs = require("dayjs");
+let throttle = require("throttle-debounce").throttle;
 
 let pipeline = promisify(stream.pipeline);
 
@@ -57,6 +58,42 @@ let videosFieldList = [
 let searchFieldList = [...videosFieldList, "video_show"];
 let searchFieldListParam = `&field_list=${searchFieldList.join(",")}`;
 let baseSearchUrl = `https://www.giantbomb.com/api/search?format=json&resources=video${searchFieldListParam}`;
+let baseVideoUrl = ` https://www.giantbomb.com/api/video`;
+
+let getVideoByGuid = async ({ apiKey, clean, debug, videoGuid }) => {
+  let result = null;
+  let requestUrl = `${baseVideoUrl}/${videoGuid}?api_key=${apiKey}&format=json`;
+
+  let cacheData = clean ? null : readCache(requestUrl);
+  if (cacheData) {
+    if (debug) {
+      console.log(`cache result found for ${requestUrl}`);
+    }
+
+    return cacheData;
+  }
+
+  await rateLimit(debug);
+
+  if (debug) {
+    console.log(`fetching ${requestUrl}`);
+  }
+
+  let body = await got(requestUrl).json();
+
+  if (!body) {
+    console.error("no video response body");
+    return null;
+  }
+
+  if (body.status_code !== 1) {
+    console.error(body.error);
+    return null;
+  }
+
+  result = body.results;
+  return result;
+};
 
 let getVideoSearch = async ({
   apiKey,
@@ -337,7 +374,8 @@ let getVideosResponse = async ({
 };
 
 let BYTES_IN_MB = 1000000;
-let printProgress = ({ percent, total, transferred }) => {
+
+let printProgress = throttle(500, ({ percent, total, transferred }) => {
   if (!process.stdout.isTTY) {
     return;
   }
@@ -362,7 +400,7 @@ let printProgress = ({ percent, total, transferred }) => {
   process.stdout.clearLine();
   process.stdout.cursorTo(0);
   process.stdout.write(line);
-};
+});
 
 let endPrintProgress = () => {
   if (!process.stdout.isTTY) {
@@ -623,6 +661,7 @@ module.exports = {
   getVideoSearch,
   getShow,
   getVideo,
+  getVideoByGuid,
   getShowsResponse,
   getVideosResponse,
   downloadVideo,
