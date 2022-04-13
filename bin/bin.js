@@ -104,8 +104,8 @@ let main = async () => {
 
     try {
       const { pathname } = new URL(program.videoGuid);
-      let guidRegex = new RegExp("[0-9]+(-[0-9]+)", "g");
-      videoGuid = guidRegex.exec(pathname)[0];
+      let guidRegex = new RegExp("/[0-9]+(-[0-9]+)(/|$)", "g");
+      videoGuid = guidRegex.exec(pathname)[0].split("/")[1];
     } catch (error) {
       // do nothing
     }
