@@ -5,14 +5,14 @@
   Required: Node
   How to Run: `node persona-4-endurance-run.js`
 */
-let execSync = require("child_process").execSync;
+const execSync = require("child_process").execSync;
 
 // Replace `YOUR_API_KEY` with the key from https://www.giantbomb.com/api
-let apiKey = "YOUR_API_KEY";
+const apiKey = "YOUR_API_KEY";
 
-let showName = "Endurance Run";
-let startingEpisodeNumber = 0;
-let endingEpisode = 160;
+const showName = "Endurance Run";
+const startingEpisodeNumber = 0;
+const endingEpisode = 160;
 
 for (let i = startingEpisodeNumber; i <= endingEpisode; i++) {
   try {

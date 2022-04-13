@@ -1,11 +1,11 @@
-let createParseNumber = ({ min, name, required = true }) => {
+const createParseNumber = ({ min, name, required = true }) => {
   return (value) => {
     if (!value && !required) {
       return undefined;
     }
 
     try {
-      let number = parseInt(value);
+      const number = parseInt(value);
 
       if (isNaN(number)) {
         console.error(`${name} must be a number`);

@@ -5,19 +5,19 @@
   Required: Node
   How to Run: `node mass-alex.js`
 */
-let execSync = require("child_process").execSync;
+const execSync = require("child_process").execSync;
 
 // Replace `YOUR_API_KEY` with the key from https://www.giantbomb.com/api
-let apiKey = "YOUR_API_KEY";
+const apiKey = "YOUR_API_KEY";
 
 /*
   Finding the `endingEpisode` is a little tricky if there are multiple seasons
   of a show, but you can add the `--info` command with different `--video-number` numbers
   to find it before running the script.
 */
-let showName = "Mass Alex";
-let startingEpisodeNumber = 0; // Mass Alex: Mass Effect - Part 01
-let endingEpisode = 42; // Mass Alex: Mass Effect 2 - Part 24
+const showName = "Mass Alex";
+const startingEpisodeNumber = 0; // Mass Alex: Mass Effect - Part 01
+const endingEpisode = 42; // Mass Alex: Mass Effect 2 - Part 24
 
 for (let i = startingEpisodeNumber; i <= endingEpisode; i++) {
   try {

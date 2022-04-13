@@ -1,20 +1,20 @@
-let stream = require("stream");
-let { promisify } = require("util");
-let got = require("got");
-let fs = require("fs");
-let path = require("path");
-let filenamify = require("filenamify");
-let dayjs = require("dayjs");
-let throttle = require("throttle-debounce").throttle;
+const stream = require("stream");
+const { promisify } = require("util");
+const got = require("got");
+const fs = require("fs");
+const path = require("path");
+const filenamify = require("filenamify");
+const dayjs = require("dayjs");
+const throttle = require("throttle-debounce").throttle;
 
-let pipeline = promisify(stream.pipeline);
+const pipeline = promisify(stream.pipeline);
 
-let MAX_DEPTH = 10;
-let DEFAULT_LIMIT = 100;
-let RATE_LIMIT_MS = 1000;
+const MAX_DEPTH = 10;
+const DEFAULT_LIMIT = 100;
+const RATE_LIMIT_MS = 1000;
 let LAST_FETCH_CALL = null;
 
-let rateLimit = (debug) => {
+const rateLimit = (debug) => {
   return new Promise((resolve) => {
     if (!LAST_FETCH_CALL) {
       LAST_FETCH_CALL = Date.now();
@@ -22,9 +22,9 @@ let rateLimit = (debug) => {
       return;
     }
 
-    let diffMs = Date.now() - LAST_FETCH_CALL;
+    const diffMs = Date.now() - LAST_FETCH_CALL;
     if (diffMs < RATE_LIMIT_MS) {
-      let delayMs = Math.max(RATE_LIMIT_MS - diffMs, 0);
+      const delayMs = Math.max(RATE_LIMIT_MS - diffMs, 0);
 
       if (debug) {
         console.log(`delaying request for ${delayMs}ms`);
@@ -40,7 +40,7 @@ let rateLimit = (debug) => {
   });
 };
 
-let videosFieldList = [
+const videosFieldList = [
   "name",
   "deck",
   "publish_date",
@@ -55,16 +55,16 @@ let videosFieldList = [
   "video_show",
 ];
 
-let searchFieldList = [...videosFieldList, "video_show"];
-let searchFieldListParam = `&field_list=${searchFieldList.join(",")}`;
-let baseSearchUrl = `https://www.giantbomb.com/api/search?format=json&resources=video${searchFieldListParam}`;
-let baseVideoUrl = ` https://www.giantbomb.com/api/video`;
+const searchFieldList = [...videosFieldList, "video_show"];
+const searchFieldListParam = `&field_list=${searchFieldList.join(",")}`;
+const baseSearchUrl = `https://www.giantbomb.com/api/search?format=json&resources=video${searchFieldListParam}`;
+const baseVideoUrl = ` https://www.giantbomb.com/api/video`;
 
-let getVideoByGuid = async ({ apiKey, clean, debug, videoGuid }) => {
+const getVideoByGuid = async ({ apiKey, clean, debug, videoGuid }) => {
   let result = null;
-  let requestUrl = `${baseVideoUrl}/${videoGuid}?api_key=${apiKey}&format=json`;
+  const requestUrl = `${baseVideoUrl}/${videoGuid}?api_key=${apiKey}&format=json`;
 
-  let cacheData = clean ? null : readCache(requestUrl);
+  const cacheData = clean ? null : readCache(requestUrl);
   if (cacheData) {
     if (debug) {
       console.log(`cache result found for ${requestUrl}`);
@@ -79,7 +79,7 @@ let getVideoByGuid = async ({ apiKey, clean, debug, videoGuid }) => {
     console.log(`fetching ${requestUrl}`);
   }
 
-  let body = await got(requestUrl).json();
+  const body = await got(requestUrl).json();
 
   if (!body) {
     console.error("no video response body");
@@ -95,7 +95,7 @@ let getVideoByGuid = async ({ apiKey, clean, debug, videoGuid }) => {
   return result;
 };
 
-let getVideoSearch = async ({
+const getVideoSearch = async ({
   apiKey,
   videoName,
   showName,
@@ -105,16 +105,16 @@ let getVideoSearch = async ({
   debug,
 }) => {
   let result = null;
-  let showRegex = showName ? new RegExp(showName, "ig") : null;
-  let videoRegex = videoName ? new RegExp(videoName, "ig") : null;
+  const showRegex = showName ? new RegExp(showName, "ig") : null;
+  const videoRegex = videoName ? new RegExp(videoName, "ig") : null;
 
-  let query = showRegex ? `${showName} ${videoName}` : videoName;
-  let queryParam = `&query="${query}"`;
-  let apiKeyParam = `&api_key=${apiKey}`;
+  const query = showRegex ? `${showName} ${videoName}` : videoName;
+  const queryParam = `&query="${query}"`;
+  const apiKeyParam = `&api_key=${apiKey}`;
 
-  let requestUrl = `${baseSearchUrl}${apiKeyParam}${queryParam}`;
+  const requestUrl = `${baseSearchUrl}${apiKeyParam}${queryParam}`;
 
-  let cacheData = clean ? null : readCache(requestUrl);
+  const cacheData = clean ? null : readCache(requestUrl);
   if (cacheData) {
     if (debug) {
       console.log(`cache result found for ${requestUrl}`);
@@ -129,7 +129,7 @@ let getVideoSearch = async ({
     console.log(`fetching ${requestUrl}`);
   }
 
-  let body = await got(requestUrl).json();
+  const body = await got(requestUrl).json();
 
   if (!body) {
     console.error("search: no response body");
@@ -141,7 +141,7 @@ let getVideoSearch = async ({
     return null;
   }
 
-  let { results } = body;
+  const { results } = body;
   result = results.find((video) => {
     if (!videoRegex.test(video.name)) {
       return false;
@@ -193,15 +193,15 @@ let getVideoSearch = async ({
   return writeCache({ key: requestUrl, data: result });
 };
 
-let getShow = async ({ apiKey, name, clean, debug }) => {
+const getShow = async ({ apiKey, name, clean, debug }) => {
   let result = null;
-  let regex = new RegExp(name, "ig");
+  const regex = new RegExp(name, "ig");
   let offset = 0;
-  let limit = DEFAULT_LIMIT;
+  const limit = DEFAULT_LIMIT;
   let totalShows = Infinity;
 
   while (!result && offset < totalShows) {
-    let response = await getShowsResponse({
+    const response = await getShowsResponse({
       apiKey,
       limit,
       offset,
@@ -211,7 +211,7 @@ let getShow = async ({ apiKey, name, clean, debug }) => {
 
     totalShows = response.number_of_total_results;
 
-    let { results } = response;
+    const { results } = response;
     result = results.find((show) => {
       return regex.test(show.title);
     });
@@ -222,7 +222,7 @@ let getShow = async ({ apiKey, name, clean, debug }) => {
   return result;
 };
 
-let getVideo = async ({
+const getVideo = async ({
   apiKey,
   name,
   number,
@@ -234,13 +234,13 @@ let getVideo = async ({
   let result = null;
 
   if (name) {
-    let nameRegex = new RegExp(name, "ig");
+    const nameRegex = new RegExp(name, "ig");
     let totalVideos = Infinity;
     let attempts = 0;
     let offset = 0;
 
     while (!result && offset < totalVideos) {
-      let response = await getVideosResponse({
+      const response = await getVideosResponse({
         apiKey,
         offset,
         filters,
@@ -251,7 +251,7 @@ let getVideo = async ({
 
       totalVideos = response.number_of_total_results;
 
-      let { results } = response;
+      const { results } = response;
       result = results.find((video) => {
         return nameRegex.test(video.name);
       });
@@ -266,7 +266,7 @@ let getVideo = async ({
       }
     }
   } else {
-    let response = await getVideosResponse({
+    const response = await getVideosResponse({
       apiKey,
       filters,
       clean,
@@ -276,25 +276,25 @@ let getVideo = async ({
       limit: 1,
     });
 
-    let { results } = response;
+    const { results } = response;
     result = results[0];
   }
 
   return result;
 };
 
-let showsFieldList = ["id", "title"];
-let showsFieldListParam = `&field_list${showsFieldList.join(",")}`;
-let baseShowsUrl = `https://www.giantbomb.com/api/video_shows?format=json${showsFieldListParam}`;
+const showsFieldList = ["id", "title"];
+const showsFieldListParam = `&field_list${showsFieldList.join(",")}`;
+const baseShowsUrl = `https://www.giantbomb.com/api/video_shows?format=json${showsFieldListParam}`;
 
-let getShowsResponse = async ({ apiKey, limit, offset, clean, debug }) => {
-  let apiKeyParam = `&api_key=${apiKey}`;
-  let limitParam = `&limit=${limit}`;
-  let offsetParam = `&offset=${offset}`;
+const getShowsResponse = async ({ apiKey, limit, offset, clean, debug }) => {
+  const apiKeyParam = `&api_key=${apiKey}`;
+  const limitParam = `&limit=${limit}`;
+  const offsetParam = `&offset=${offset}`;
 
-  let requestUrl = `${baseShowsUrl}${apiKeyParam}${limitParam}${offsetParam}`;
+  const requestUrl = `${baseShowsUrl}${apiKeyParam}${limitParam}${offsetParam}`;
 
-  let cacheData = clean ? null : readCache(requestUrl);
+  const cacheData = clean ? null : readCache(requestUrl);
   if (cacheData) {
     if (debug) {
       console.log(`cache result found for ${requestUrl}`);
@@ -309,7 +309,7 @@ let getShowsResponse = async ({ apiKey, limit, offset, clean, debug }) => {
     console.log(`fetching ${requestUrl}`);
   }
 
-  let body = await got(requestUrl).json();
+  const body = await got(requestUrl).json();
 
   if (!body) {
     console.error("shows: no response body");
@@ -324,10 +324,10 @@ let getShowsResponse = async ({ apiKey, limit, offset, clean, debug }) => {
   return writeCache({ key: requestUrl, data: body });
 };
 
-let videosFieldListParam = `&field_list=${videosFieldList.join(",")}`;
-let baseVideosUrl = `https://www.giantbomb.com/api/videos/?format=json${videosFieldListParam}`;
+const videosFieldListParam = `&field_list=${videosFieldList.join(",")}`;
+const baseVideosUrl = `https://www.giantbomb.com/api/videos/?format=json${videosFieldListParam}`;
 
-let getVideosResponse = async ({
+const getVideosResponse = async ({
   apiKey,
   offset,
   limit,
@@ -336,14 +336,14 @@ let getVideosResponse = async ({
   clean,
   debug,
 }) => {
-  let apiKeyParam = `&api_key=${apiKey}`;
-  let limitParam = `&limit=${limit}`;
-  let offsetParam = `&offset=${offset}`;
-  let filterParam = `&filter=${filters.join(",")}`;
-  let sortParam = reverse ? "&sort=id:asc" : "";
-  let requestUrl = `${baseVideosUrl}${apiKeyParam}${limitParam}${offsetParam}${filterParam}${sortParam}`;
+  const apiKeyParam = `&api_key=${apiKey}`;
+  const limitParam = `&limit=${limit}`;
+  const offsetParam = `&offset=${offset}`;
+  const filterParam = `&filter=${filters.join(",")}`;
+  const sortParam = reverse ? "&sort=id:asc" : "";
+  const requestUrl = `${baseVideosUrl}${apiKeyParam}${limitParam}${offsetParam}${filterParam}${sortParam}`;
 
-  let cacheData = clean ? null : readCache(requestUrl);
+  const cacheData = clean ? null : readCache(requestUrl);
   if (cacheData) {
     if (debug) {
       console.log(`cache result found for ${requestUrl}`);
@@ -358,7 +358,7 @@ let getVideosResponse = async ({
     console.log(`fetching ${requestUrl}`);
   }
 
-  let body = await got(requestUrl).json();
+  const body = await got(requestUrl).json();
 
   if (!body) {
     console.error("videos: no response body");
@@ -373,9 +373,9 @@ let getVideosResponse = async ({
   return writeCache({ key: requestUrl, data: body });
 };
 
-let BYTES_IN_MB = 1000000;
+const BYTES_IN_MB = 1000000;
 
-let printProgress = throttle(500, ({ percent, total, transferred }) => {
+const printProgress = throttle(500, ({ percent, total, transferred }) => {
   if (!process.stdout.isTTY) {
     return;
   }
@@ -387,12 +387,12 @@ let printProgress = throttle(500, ({ percent, total, transferred }) => {
      * Got has a bug where "percent" will be 1 for a moment when the download starts.
      * Ignore percent until transfer has started.
      */
-    let percentRounded = (percent * 100).toFixed(2);
+    const percentRounded = (percent * 100).toFixed(2);
     line += ` ${percentRounded}%`;
 
     if (total) {
-      let totalMBs = total / BYTES_IN_MB;
-      let roundedTotalMbs = totalMBs.toFixed(2);
+      const totalMBs = total / BYTES_IN_MB;
+      const roundedTotalMbs = totalMBs.toFixed(2);
       line += ` of ${roundedTotalMbs} MB`;
     }
   }
@@ -402,7 +402,7 @@ let printProgress = throttle(500, ({ percent, total, transferred }) => {
   process.stdout.write(line);
 });
 
-let endPrintProgress = () => {
+const endPrintProgress = () => {
   if (!process.stdout.isTTY) {
     return;
   }
@@ -410,7 +410,7 @@ let endPrintProgress = () => {
   process.stdout.write("\n");
 };
 
-let downloadVideo = async ({
+const downloadVideo = async ({
   apiKey,
   video,
   quality,
@@ -421,7 +421,7 @@ let downloadVideo = async ({
   addGuidPrefix,
   addDatePrefix,
 }) => {
-  let publishDate = dayjs(new Date(video.publish_date));
+  const publishDate = dayjs(new Date(video.publish_date));
   let qualityUrl =
     quality === "highest"
       ? getHighestQualityUrl(video)
@@ -433,7 +433,7 @@ let downloadVideo = async ({
   }
 
   let downloadUrl = `${qualityUrl}?api_key=${apiKey}`;
-  let showTitle =
+  const showTitle =
     video.video_show && video.video_show.title ? video.video_show.title : null;
 
   /*
@@ -442,8 +442,8 @@ let downloadVideo = async ({
     @see https://github.com/lightpohl/gb-dl/issues/4
   */
   if (quality === "highest" && qualityUrl.includes("_4000.")) {
-    let maxBitrateUrl = `${qualityUrl.replace("_4000.", "_8000.")}`;
-    let maxBitrateDownloadUrl = `${maxBitrateUrl}?api_key=${apiKey}`;
+    const maxBitrateUrl = `${qualityUrl.replace("_4000.", "_8000.")}`;
+    const maxBitrateDownloadUrl = `${maxBitrateUrl}?api_key=${apiKey}`;
 
     try {
       await rateLimit(debug);
@@ -473,8 +473,8 @@ let downloadVideo = async ({
     return;
   }
 
-  let safeFilename = filenamify(video.name, { replacement: "_" });
-  let fileExt = path.extname(qualityUrl);
+  const safeFilename = filenamify(video.name, { replacement: "_" });
+  const fileExt = path.extname(qualityUrl);
   let fullFilename =
     addGuidPrefix && video.guid
       ? `${video.guid} - ${safeFilename}${fileExt}`
@@ -483,8 +483,8 @@ let downloadVideo = async ({
     ? `${publishDate.format("YYYY-MM-DD")} - ${fullFilename}`
     : fullFilename;
 
-  let outputPath = path.resolve(process.cwd(), outDir, fullFilename);
-  let removeFile = () => {
+  const outputPath = path.resolve(process.cwd(), outDir, fullFilename);
+  const removeFile = () => {
     if (fs.existsSync(outputPath)) {
       fs.unlinkSync(outputPath);
     }
@@ -495,7 +495,7 @@ let downloadVideo = async ({
   console.log(`output path: ${outputPath}`);
 
   await rateLimit(debug);
-  let headResponse = await got(downloadUrl, {
+  const headResponse = await got(downloadUrl, {
     timeout: 5000,
     method: "HEAD",
     responseType: "json",
@@ -520,8 +520,8 @@ let downloadVideo = async ({
     throw error;
   }
 
-  let fileSize = fs.statSync(outputPath).size;
-  let expectedSize = parseInt(headResponse.headers["content-length"]);
+  const fileSize = fs.statSync(outputPath).size;
+  const expectedSize = parseInt(headResponse.headers["content-length"]);
 
   if (fileSize === 0) {
     removeFile();
@@ -539,12 +539,12 @@ let downloadVideo = async ({
   }
 };
 
-let qualityList = ["hd", "high", "low", "mobile"];
-let getHighestQualityUrl = (video) => {
+const qualityList = ["hd", "high", "low", "mobile"];
+const getHighestQualityUrl = (video) => {
   let highestQualityUrl = null;
   for (let i = 0; i < qualityList.length; i++) {
-    let quality = qualityList[i];
-    let qualityUrl = video[`${quality}_url`];
+    const quality = qualityList[i];
+    const qualityUrl = video[`${quality}_url`];
 
     if (qualityUrl) {
       highestQualityUrl = qualityUrl;
@@ -555,8 +555,8 @@ let getHighestQualityUrl = (video) => {
   return highestQualityUrl;
 };
 
-let cachePath = path.resolve(process.cwd(), "gb-dl-cache.json");
-let writeCache = ({ key, data }) => {
+const cachePath = path.resolve(process.cwd(), "gb-dl-cache.json");
+const writeCache = ({ key, data }) => {
   let cache = {};
 
   if (fs.existsSync(cachePath)) {
@@ -572,25 +572,25 @@ let writeCache = ({ key, data }) => {
   return data;
 };
 
-let isExpiredTimestamp = (ts) => {
-  let timeDiffMs = Date.now() - ts;
-  let timeDiffInMinutes = Math.floor(timeDiffMs / 1000 / 60);
+const isExpiredTimestamp = (ts) => {
+  const timeDiffMs = Date.now() - ts;
+  const timeDiffInMinutes = Math.floor(timeDiffMs / 1000 / 60);
 
   return timeDiffInMinutes > 60;
 };
 
-let readCache = (key) => {
+const readCache = (key) => {
   if (!fs.existsSync(cachePath)) {
     return null;
   }
 
-  let cache = JSON.parse(fs.readFileSync(cachePath));
+  const cache = JSON.parse(fs.readFileSync(cachePath));
 
   if (!cache[key]) {
     return null;
   }
 
-  let { ts, data } = cache[key];
+  const { ts, data } = cache[key];
 
   if (isExpiredTimestamp(ts)) {
     return null;
@@ -599,14 +599,14 @@ let readCache = (key) => {
   return data;
 };
 
-let trimCache = (debug) => {
+const trimCache = (debug) => {
   if (!fs.existsSync(cachePath)) {
     return;
   }
 
-  let cache = JSON.parse(fs.readFileSync(cachePath));
-  let trimmedCache = Object.keys(cache).reduce((acc, key) => {
-    let cacheItem = cache[key];
+  const cache = JSON.parse(fs.readFileSync(cachePath));
+  const trimmedCache = Object.keys(cache).reduce((acc, key) => {
+    const cacheItem = cache[key];
 
     if (isExpiredTimestamp(cacheItem.ts)) {
       if (debug) {
@@ -621,8 +621,8 @@ let trimCache = (debug) => {
   fs.writeFileSync(cachePath, JSON.stringify(trimmedCache, null, 4));
 };
 
-let archivePath = path.resolve(process.cwd(), "gb-dl-archive.json");
-let writeToArchive = (downloadUrl) => {
+const archivePath = path.resolve(process.cwd(), "gb-dl-archive.json");
+const writeToArchive = (downloadUrl) => {
   let archive = [];
 
   if (fs.existsSync(archivePath)) {
@@ -636,23 +636,23 @@ let writeToArchive = (downloadUrl) => {
   fs.writeFileSync(archivePath, JSON.stringify(archive, null, 4));
 };
 
-let isInArchive = (downloadUrl) => {
+const isInArchive = (downloadUrl) => {
   if (!fs.existsSync(archivePath)) {
     return false;
   }
 
-  let archive = JSON.parse(fs.readFileSync(archivePath));
+  const archive = JSON.parse(fs.readFileSync(archivePath));
 
   return archive.includes(downloadUrl);
 };
 
-let blocklistPath = path.resolve(process.cwd(), "gb-dl-blocklist.json");
-let isInBlocklist = (showTitle) => {
+const blocklistPath = path.resolve(process.cwd(), "gb-dl-blocklist.json");
+const isInBlocklist = (showTitle) => {
   if (!fs.existsSync(blocklistPath)) {
     return false;
   }
 
-  let blocklist = JSON.parse(fs.readFileSync(blocklistPath));
+  const blocklist = JSON.parse(fs.readFileSync(blocklistPath));
 
   return blocklist.includes(showTitle);
 };

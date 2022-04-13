@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-let fs = require("fs");
-let program = require("commander");
-let dayjs = require("dayjs");
+const fs = require("fs");
+const program = require("commander");
+const dayjs = require("dayjs");
 
-let { version } = require("../package.json");
-let {
+const { version } = require("../package.json");
+const {
   getVideoSearch,
   getShow,
   getVideo,
@@ -13,11 +13,11 @@ let {
   trimCache,
   getVideoByGuid,
 } = require("./util");
-let { createParseNumber } = require("./validate");
+const { createParseNumber } = require("./validate");
 
-let { GIANTBOMB_TOKEN } = process.env;
+const { GIANTBOMB_TOKEN } = process.env;
 
-let filters = [];
+const filters = [];
 
 program
   .version(version)
@@ -95,16 +95,16 @@ if (program.onlyPremium) {
 
 trimCache(program.debug);
 
-let main = async () => {
+const main = async () => {
   let result = null;
-  let apiKey = program.apiKey || GIANTBOMB_TOKEN;
+  const apiKey = program.apiKey || GIANTBOMB_TOKEN;
 
   if (program.videoGuid) {
     let videoGuid = program.videoGuid;
 
     try {
       const { pathname } = new URL(program.videoGuid);
-      let guidRegex = new RegExp("/[0-9]+(-[0-9]+)(/|$)", "g");
+      const guidRegex = new RegExp("/[0-9]+(-[0-9]+)(/|$)", "g");
       videoGuid = guidRegex.exec(pathname)[0].split("/")[1];
     } catch (error) {
       // do nothing
@@ -152,7 +152,7 @@ let main = async () => {
   }
 
   if (program.showName) {
-    let show = await getShow({
+    const show = await getShow({
       apiKey,
       name: program.showName,
       clean: program.clean,
@@ -183,8 +183,8 @@ let main = async () => {
   }
 
   if (program.dateBefore) {
-    let dateBefore = dayjs(new Date(program.dateBefore));
-    let videoDate = dayjs(new Date(video.publish_date));
+    const dateBefore = dayjs(new Date(program.dateBefore));
+    const videoDate = dayjs(new Date(video.publish_date));
 
     if (
       !videoDate.isBefore(dateBefore, "day") &&
@@ -198,8 +198,8 @@ let main = async () => {
   }
 
   if (program.dateAfter) {
-    let dateAfter = dayjs(new Date(program.dateAfter));
-    let videoDate = dayjs(new Date(video.publish_date));
+    const dateAfter = dayjs(new Date(program.dateAfter));
+    const videoDate = dayjs(new Date(video.publish_date));
 
     if (
       !videoDate.isAfter(dateAfter, "day") &&
