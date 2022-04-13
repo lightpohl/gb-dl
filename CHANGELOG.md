@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/lightpohl/gb-dl/compare/v2.11.1...v3.0.0) (2022-04-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* skip videos if found locally
+
+### Features
+
+* skip videos if found locally ([ac22245](https://github.com/lightpohl/gb-dl/commit/ac222453c8f121c5741872d98033ca501f725b21))
+
 ### [2.11.1](https://github.com/lightpohl/gb-dl/compare/v2.11.0...v2.11.1) (2022-04-13)
 
 
