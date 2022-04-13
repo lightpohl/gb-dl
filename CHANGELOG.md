@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.11.1](https://github.com/lightpohl/gb-dl/compare/v2.11.0...v2.11.1) (2022-04-13)
+
+
+### Bug Fixes
+
+* improve GUID from url parsing ([4c894cc](https://github.com/lightpohl/gb-dl/commit/4c894cc67081503f6e060d99cc0eef2824f27ff2))
+
 ## [2.11.0](https://github.com/lightpohl/gb-dl/compare/v2.10.0...v2.11.0) (2022-04-13)
 
 
