@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/lightpohl/gb-dl/compare/v3.0.0...v3.0.1) (2022-04-13)
+
+
+### Bug Fixes
+
+* prevent last download percentage log out of order ([f799d76](https://github.com/lightpohl/gb-dl/commit/f799d76e60f4f83fa2acefbf3c18a35f6a42594d))
+
 ## [3.0.0](https://github.com/lightpohl/gb-dl/compare/v2.11.1...v3.0.0) (2022-04-13)
 
 
