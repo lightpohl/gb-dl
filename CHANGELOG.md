@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.11.0](https://github.com/lightpohl/gb-dl/compare/v2.10.0...v2.11.0) (2022-04-13)
+
+
+### Features
+
+* add support for --video-guid ([34a4037](https://github.com/lightpohl/gb-dl/commit/34a403795c147c9b362e04a6f5f1cde01d2df5d1))
+
 ## [2.10.0](https://github.com/lightpohl/gb-dl/compare/v2.9.1...v2.10.0) (2021-09-17)
 
 
