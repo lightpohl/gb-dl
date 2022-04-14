@@ -10,19 +10,15 @@
 
 [Visit the releases page](https://github.com/lightpohl/gb-dl/releases) and download the latest binary for your system.
 
-`gb-dl --api-key <YOUR_API_KEY> --show-name <string> --video-name <string>`
-
-`gb-dl --api-key <YOUR_API_KEY> --show-name "Giant Bombcast" --video-name "Giant Bombcast 607"`
-
-`gb-dl --api-key <YOUR_API_KEY> --show-name "Giant Bombcast" --video-number 0`
-
-`gb-dl --api-key <YOUR_API_KEY> --video-guid "2970-14405"`
+`gb-dl --api-key <YOUR_API_KEY> --video-name <string>`
 
 ### npx
 
 **[Node Required](https://nodejs.org/en/)**
 
-`npx gb-dl --api-key <YOUR_API_KEY> --show-name <string> --video-name <string>`
+`npx gb-dl --api-key <YOUR_API_KEY> --video-name <string>`
+
+### [More Examples](./examples/README.md)
 
 ## Options
 
@@ -33,11 +29,11 @@
 | Option                 | Type   | Required | Description                                                                                           |
 | ---------------------- | ------ | -------- | ----------------------------------------------------------------------------------------------------- |
 | --api-key              | String | false\*  | Individual [Giant Bomb API key](https://www.giantbomb.com/api/).                                      |
-| --show-name            | String | false    | Used to find matching show title.                                                                     |
 | --video-name           | String | false\*  | Used to find matching video title.                                                                    |
 | --video-guid           | String | false\*  | Used to grab a video by its GUID directly.                                                            |
 | --video-number         | Number | false\*  | Zero-based video index for provided show (most recent video is `0`). Defaults to `0`.                 |
 | --video-number-reverse |        | false    | Swaps direction of provided "--video-number" (oldest video is now `0`).                               |
+| --show-name            | String | false    | Used to find matching show title.                                                                     |
 | --only-premium         |        | false    | Filter search to only premium videos.                                                                 |
 | --only-free            |        | false    | Filter search to only free videos.                                                                    |
 | --quality              | String | false    | Specify quality of video to download. Defaults to highest. Other options: hd, high, low and mobile.   |
