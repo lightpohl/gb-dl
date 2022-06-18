@@ -53,7 +53,7 @@
 ## [Giant Bomb API](https://www.giantbomb.com/api/)
 
 - Make sure to stay within the [Giant Bomb API usage guidelines](https://www.giantbomb.com/api/).
-- The Giant Bomb API has an account download limit of **100 videos per day.**
+- The Giant Bomb API has an unmentioned account download limit of **100 videos per day.**
 
 ## Rate Limiting
 
@@ -74,7 +74,7 @@
 
 ## Blocklist
 
-- If the `--blocklist` flag is passed, `gb-dl` will lookup a `gb-dl-blocklist.json` in the current working directory.
+- If the `--blocklist` flag is passed, `gb-dl` will look up a `gb-dl-blocklist.json` in the current working directory.
 - Before downloading a video it'll check if the `video_show` title is included in the blocklist and ignore the download if found.
 - See [Examples](./examples) for an example blocklist.
 
