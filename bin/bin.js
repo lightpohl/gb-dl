@@ -12,6 +12,7 @@ const {
   downloadVideo,
   trimCache,
   getVideoByGuid,
+  healthCheck,
 } = require("./util");
 const { createParseNumber } = require("./validate");
 
@@ -67,6 +68,7 @@ program
   .option("--clean", "ignore previous cache results for query")
   .option("--debug", "show debug statements")
   .option("--blocklist", "check if show is on blocklist before downloading")
+  .option("--health-check", "check the Giant Bomb API for ongoing issues")
   .parse(process.argv);
 
 if (!program.apiKey && !GIANTBOMB_TOKEN) {
@@ -98,6 +100,11 @@ trimCache(program.debug);
 const main = async () => {
   let result = null;
   const apiKey = program.apiKey || GIANTBOMB_TOKEN;
+
+  if (program.healthCheck) {
+    await healthCheck({ apiKey, debug: program.debug });
+    return;
+  }
 
   if (program.videoGuid) {
     let videoGuid = program.videoGuid;
