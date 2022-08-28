@@ -47,6 +47,7 @@
 | --blocklist            |        | false    | Check blocklist before downloading.                                                                   |
 | --clean                |        | false    | Ignore cache when making query.                                                                       |
 | --debug                |        | false    | Show debug statements.                                                                                |
+| --health-check         |        | false    | Check the Giant Bomb API for ongoing issues.                                                          |
 | --version              |        | false    | Output the version number.                                                                            |
 | --help                 |        | false    | Output usage information.                                                                             |
 

@@ -14,6 +14,102 @@ const DEFAULT_LIMIT = 100;
 const RATE_LIMIT_MS = 1000;
 let LAST_FETCH_CALL = null;
 
+const healthCheck = async ({ apiKey, debug }) => {
+  const apiKeyParam = `&api_key=${apiKey}`;
+  const limitParam = `&limit=10`;
+
+  const searchTestUrl = `https://www.giantbomb.com/api/search?format=json&resources=video&query="Giant Bombcast"${apiKeyParam}`;
+  const showTestUrl = `https://www.giantbomb.com/api/video_shows?format=json${limitParam}${apiKeyParam}`;
+  const videosTestUrl = `https://www.giantbomb.com/api/videos/?format=json${limitParam}${apiKeyParam}`;
+  const videoGuidTestUrl = `https://www.giantbomb.com/api/video/2970-21807?format=json&${apiKeyParam}`;
+
+  try {
+    const body = await got(searchTestUrl).json();
+
+    if (!body) {
+      throw new Error("no response body");
+    }
+
+    if (body.status_code !== 1) {
+      throw new Error(body.error);
+    }
+
+    console.log("Search API ✅");
+  } catch (error) {
+    console.error("Search API ❌");
+
+    if (debug) {
+      console.error(error);
+    }
+  }
+
+  await rateLimit(debug);
+
+  try {
+    const body = await got(showTestUrl).json();
+
+    if (!body) {
+      throw new Error("no response body");
+    }
+
+    if (body.status_code !== 1) {
+      throw new Error(body.error);
+    }
+
+    console.log("Show List API ✅");
+  } catch (error) {
+    console.error("Show List API ❌");
+
+    if (debug) {
+      console.error(error);
+    }
+  }
+
+  await rateLimit(debug);
+
+  try {
+    const body = await got(videosTestUrl).json();
+
+    if (!body) {
+      throw new Error("no response body");
+    }
+
+    if (body.status_code !== 1) {
+      throw new Error(body.error);
+    }
+
+    console.log("Videos API ✅");
+  } catch (error) {
+    console.error("Videos API ❌");
+
+    if (debug) {
+      console.error(error);
+    }
+  }
+
+  await rateLimit(debug);
+
+  try {
+    const body = await got(videoGuidTestUrl).json();
+
+    if (!body) {
+      throw new Error("no response body");
+    }
+
+    if (body.status_code !== 1) {
+      throw new Error(body.error);
+    }
+
+    console.log("Video GUID API ✅");
+  } catch (error) {
+    console.error("Video GUID API ❌");
+
+    if (debug) {
+      console.error(error);
+    }
+  }
+};
+
 const rateLimit = (debug) => {
   return new Promise((resolve) => {
     if (!LAST_FETCH_CALL) {
@@ -667,4 +763,5 @@ module.exports = {
   getVideosResponse,
   downloadVideo,
   trimCache,
+  healthCheck,
 };
