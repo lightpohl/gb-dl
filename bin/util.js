@@ -478,11 +478,7 @@ const printProgress = throttle(500, ({ percent, total, transferred }) => {
 
   let line = `downloading...`;
 
-  if (transferred > 0) {
-    /*
-     * Got has a bug where "percent" will be 1 for a moment when the download starts.
-     * Ignore percent until transfer has started.
-     */
+  if (transferred > 0 && percent < 1) {
     const percentRounded = (percent * 100).toFixed(2);
     line += ` ${percentRounded}%`;
 
