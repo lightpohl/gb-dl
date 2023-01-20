@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.1](https://github.com/lightpohl/gb-dl/compare/v3.0.1...v3.1.1) (2023-01-20)
+
+
+### Features
+
+* add '--health-check' for easier debugging ([4a08510](https://github.com/lightpohl/gb-dl/commit/4a0851033a3345abedb33720abe46f3196a1c4cc))
+
+
+### Bug Fixes
+
+* prevent early '100%' progress from being shown ([5c42ee7](https://github.com/lightpohl/gb-dl/commit/5c42ee7e2032926d7282f0bedae5f52b779e524c))
+
 ## [3.1.0](https://github.com/lightpohl/gb-dl/compare/v3.0.1...v3.1.0) (2022-08-28)
 
 
