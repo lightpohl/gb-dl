@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.2](https://github.com/lightpohl/gb-dl/compare/v3.1.1...v3.1.2) (2023-01-22)
+
+
+### Bug Fixes
+
+* unable to find newer shows due to API bug ([1c5d7f9](https://github.com/lightpohl/gb-dl/commit/1c5d7f9fb0a2573e0222a06bf7e025d3b7096121)), closes [#12](https://github.com/lightpohl/gb-dl/issues/12)
+
 ### [3.1.1](https://github.com/lightpohl/gb-dl/compare/v3.0.1...v3.1.1) (2023-01-20)
 
 
