@@ -305,7 +305,14 @@ const getShow = async ({ apiKey, name, clean, debug }) => {
       debug,
     });
 
-    totalShows = response.number_of_total_results;
+    /*
+      The Giant Bomb API is returning an incorrect 'number_of_total_results'.
+      It is currently always the value of the provided offset (i.e. 100).
+      This is a hacky workaround to manually check a second page of results and will work
+      until Giant Bomb has >200 shows.
+      @see https://github.com/lightpohl/gb-dl/issues/12
+    */
+    totalShows = response.number_of_total_results + 1;
 
     const { results } = response;
     result = results.find((show) => {
