@@ -539,23 +539,45 @@ const downloadVideo = async ({
     The Giant Bomb API isn't returning the highest bitrate version
     for newer videos. We manually check for this highest quality as a workaround.
     @see https://github.com/lightpohl/gb-dl/issues/4
+    @see https://github.com/lightpohl/gb-dl/issues/13
   */
-  if (quality === "highest" && qualityUrl.includes("_4000.")) {
-    const maxBitrateUrl = `${qualityUrl.replace("_4000.", "_8000.")}`;
-    const maxBitrateDownloadUrl = `${maxBitrateUrl}?api_key=${apiKey}`;
+  if (quality === "highest") {
+    const maxBitrateUrl = (() => {
+      // vf_ql_destiny2beyondlight_121120_6190_4000.mp4
+      const originalBitrateRegex = /[0-9]{4}\.mp4$/;
 
-    try {
-      await rateLimit(debug);
-      await got(maxBitrateDownloadUrl, {
-        timeout: 5000,
-        method: "HEAD",
-        responseType: "json",
-      });
+      // vf_ql_tunic_031622_027_1_1080h5000k.mp4
+      const newBitrateRegex = /[0-9]{4}k\.mp4$/;
 
-      qualityUrl = maxBitrateUrl;
-      downloadUrl = maxBitrateDownloadUrl;
-    } catch (error) {
-      // do nothing
+      // Older video filename format used until 2021-06-30
+      if (originalBitrateRegex.test(qualityUrl)) {
+        return qualityUrl.replace(originalBitrateRegex, "8000.mp4");
+      }
+
+      // Present video filename format
+      if (newBitrateRegex.test(qualityUrl)) {
+        return qualityUrl.replace(newBitrateRegex, "8000k.mp4");
+      }
+
+      return qualityUrl;
+    })();
+
+    if (maxBitrateUrl !== qualityUrl) {
+      const maxBitrateDownloadUrl = `${maxBitrateUrl}?api_key=${apiKey}`;
+
+      try {
+        await rateLimit(debug);
+        await got(maxBitrateDownloadUrl, {
+          timeout: 5000,
+          method: "HEAD",
+          responseType: "json",
+        });
+
+        qualityUrl = maxBitrateUrl;
+        downloadUrl = maxBitrateDownloadUrl;
+      } catch (error) {
+        // do nothing
+      }
     }
   }
 
