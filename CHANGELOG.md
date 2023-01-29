@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.3](https://github.com/lightpohl/gb-dl/compare/v3.1.2...v3.1.3) (2023-01-29)
+
+
+### Bug Fixes
+
+* support 8k bitrate format on newer videos ([ebffc4f](https://github.com/lightpohl/gb-dl/commit/ebffc4f1929839192197aadbc00980153a6069d0)), closes [#13](https://github.com/lightpohl/gb-dl/issues/13)
+
 ### [3.1.2](https://github.com/lightpohl/gb-dl/compare/v3.1.1...v3.1.2) (2023-01-22)
 
 
